@@ -1,14 +1,15 @@
-package com.atmosware.musicplayer.model.entities;
+package com.atmosware.musicplayer.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Builder
 @Table(name = "artists")
 public class Artist {
     @Id
@@ -17,4 +18,11 @@ public class Artist {
     private String name;
     private int numberOfSongs;
     private int numberOfAlbum;
+    private String imagePath;
+
+    @OneToMany(mappedBy = "artist", fetch = FetchType.LAZY)
+    private List<Album> albums;
+
+    @OneToMany(mappedBy = "artist", fetch = FetchType.LAZY)
+    private List<Song> songs;
 }

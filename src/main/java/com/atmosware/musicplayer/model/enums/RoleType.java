@@ -1,6 +1,6 @@
 package com.atmosware.musicplayer.model.enums;
 
-public enum Role {
+public enum RoleType {
     ADMIN,
     USER
 }

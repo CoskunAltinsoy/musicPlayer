@@ -1,4 +1,4 @@
-package com.atmosware.musicplayer.model.entities;
+package com.atmosware.musicplayer.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -11,15 +11,15 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Builder
 @Table(name = "albums")
-public class Album {
-    @Id
-    @GeneratedValue(strategy =  GenerationType.IDENTITY)
-    private Long id;
+public class Album extends BaseEntity{
     private String name;
     private LocalDateTime releasedYear;
 
     @OneToMany(mappedBy = "album", fetch = FetchType.LAZY)
     private List<Song> songs;
+
+    @ManyToOne
+    @JoinColumn(name = "artist_id")
+    private Artist artist;
 }
