@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -15,8 +16,7 @@ public abstract class BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    private String imagePath;
-    private LocalDate createdDate;
-    private LocalDate updatedDate;
-    private boolean isDeleted;
+    //private String imagePath;
+    private LocalDateTime createdDate;
+    private LocalDateTime updatedDate;
 }

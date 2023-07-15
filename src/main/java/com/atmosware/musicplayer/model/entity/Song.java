@@ -12,10 +12,8 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "songs")
-public class Song {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Song extends BaseEntity{
+
     private String name;
 
     @ManyToOne()
