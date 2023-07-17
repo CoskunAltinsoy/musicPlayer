@@ -6,17 +6,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Set;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class FavoriteRequest {
-    @Min(0)
-    private Long albumId;
-    @Min(0)
-    private Long artistId;
-    @Min(0)
-    private Long playlistId;
+    private Set<Long> albumIds;
+    private Set<Long> artistIds;
+    private Set<Long> playlistIds;
     @Min(0)
     private Long userId;
 }

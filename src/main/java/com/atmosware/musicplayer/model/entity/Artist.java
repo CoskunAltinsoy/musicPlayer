@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -23,4 +24,7 @@ public class Artist extends BaseEntity{
 
     @OneToMany(mappedBy = "artist", fetch = FetchType.LAZY)
     private List<Song> songs;
+
+    @ManyToMany(mappedBy = "artist")
+    private Set<Favorite> favorites;
 }

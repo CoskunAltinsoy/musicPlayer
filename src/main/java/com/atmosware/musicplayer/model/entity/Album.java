@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -22,4 +23,7 @@ public class Album extends BaseEntity{
     @ManyToOne
     @JoinColumn(name = "artist_id")
     private Artist artist;
+
+    @ManyToMany(mappedBy = "albums")
+    private Set<Favorite> favorites;
 }
