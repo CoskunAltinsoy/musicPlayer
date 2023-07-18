@@ -18,7 +18,6 @@ import java.util.Map;
 public class GlobalRestExceptionHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-
     public ExceptionResult<Object> handleBusinessException(BusinessException exception) {
         return new ExceptionResult<Object>(
                 exception.getMessage(),
@@ -34,7 +33,6 @@ public class GlobalRestExceptionHandler {
         for (FieldError fieldError : exception.getBindingResult().getFieldErrors()) {
             validationErrors.put(fieldError.getField(), fieldError.getDefaultMessage());
         }
-
         ExceptionResult<Object> exceptionResult = new ExceptionResult<Object>(
                 validationErrors,
                 ExceptionTypes.Exception.Validation,

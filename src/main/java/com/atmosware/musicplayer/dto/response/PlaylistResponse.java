@@ -1,8 +1,6 @@
 package com.atmosware.musicplayer.dto.response;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+
+import lombok.*;
 
 import java.util.Set;
 
@@ -10,7 +8,9 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class PlaylistResponse {
+    private Long id;
     private Long userId;
     private Set<Long> songIds;
     private String name;

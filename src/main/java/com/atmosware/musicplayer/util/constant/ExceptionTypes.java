@@ -1,5 +1,6 @@
 package com.atmosware.musicplayer.util.constant;
 
+
 public class ExceptionTypes {
     public static class Exception {
         public static final String Validation = "VALIDATION_EXCEPTION";

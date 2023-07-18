@@ -1,7 +1,11 @@
 package com.atmosware.musicplayer.model.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import java.util.Set;
 
@@ -10,8 +14,9 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@SuperBuilder
 @Table(name = "playlists")
-public class Playlist extends BaseEntity{
+public class Playlist extends BaseEntity {
     private String name;
 
     @ManyToOne

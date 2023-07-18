@@ -10,9 +10,11 @@ import java.util.List;
 @Repository
 public interface AlbumRepository extends JpaRepository<Album, Long> {
     Album findByName(String name);
+
     List<Album> findByReleasedYearGreaterThan(LocalDateTime year);
 
-    boolean existsByNameAndArtistId(String name, Long artistId);
+    boolean existsByNameAndArtist_Id(String name, Long artistId);
+
     boolean existsByNameIgnoreCase(String name);
 
 }

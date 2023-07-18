@@ -1,12 +1,12 @@
 package com.atmosware.musicplayer.service.impl;
 
+import com.atmosware.musicplayer.converter.ArtistConverter;
 import com.atmosware.musicplayer.dto.request.ArtistRequest;
 import com.atmosware.musicplayer.dto.response.ArtistResponse;
 import com.atmosware.musicplayer.model.entity.Artist;
 import com.atmosware.musicplayer.repository.ArtistRepository;
 import com.atmosware.musicplayer.service.ArtistService;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -17,10 +17,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ArtistServiceImpl implements ArtistService {
     private final ArtistRepository repository;
-    private final ModelMapper mapper;
+    private final ArtistConverter converter;
+
     @Override
     public void create(ArtistRequest request) {
-        Artist artist = mapper.map(request, Artist.class);
+        Artist artist = converter.convertToEntity(request);
         int numberOfSongs = artist.getSongs().size();
         int numberOfAlbums = artist.getAlbums().size();
         artist.setId(0L);
@@ -35,7 +36,11 @@ public class ArtistServiceImpl implements ArtistService {
     public void update(ArtistRequest request, Long id) {
         Artist artist = repository.findById(id).orElseThrow();
         artist.setUpdatedDate(LocalDateTime.now());
-        Artist updatedArtist = mapper.map(request, Artist.class);
+        Artist updatedArtist = converter.convertToEntity(request);
+        int numberOfSongs = artist.getSongs().size();
+        int numberOfAlbums = artist.getAlbums().size();
+        updatedArtist.setNumberOfSongs(numberOfSongs);
+        updatedArtist.setNumberOfAlbum(numberOfAlbums);
         repository.save(updatedArtist);
     }
 
@@ -47,24 +52,21 @@ public class ArtistServiceImpl implements ArtistService {
     @Override
     public ArtistResponse getById(Long id) {
         Artist artist = repository.findById(id).orElseThrow();
-        ArtistResponse response = mapper.map(artist, ArtistResponse.class);
-        return response;
+        return converter.convertToResponse(artist);
     }
 
     @Override
     public List<ArtistResponse> getAll() {
         List<Artist> artists = repository.findAll();
-        List<ArtistResponse> responses = artists
+        return artists
                 .stream()
-                .map(artist -> mapper.map(artist,ArtistResponse.class))
+                .map(converter::convertToResponse)
                 .collect(Collectors.toList());
-        return responses;
     }
 
     @Override
     public ArtistResponse getByName(String name) {
         Artist artist = repository.findByNameIgnoreCase(name);
-        ArtistResponse response = mapper.map(artist, ArtistResponse.class);
-        return response;
+        return converter.convertToResponse(artist);
     }
 }

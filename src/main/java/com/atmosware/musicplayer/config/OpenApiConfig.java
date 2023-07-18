@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class OpenApiConfig {
     @Bean
-    public OpenAPI customOpenAPI(){
+    public OpenAPI customOpenAPI() {
         Contact contact = new Contact();
         contact.setName("Mücahit Coşkun Altınsoy");
         contact.email("coskun.altinsoyy@gmail.com");

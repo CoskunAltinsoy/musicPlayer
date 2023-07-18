@@ -1,17 +1,17 @@
 package com.atmosware.musicplayer.dto.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class AlbumResponse {
     private Long id;
+    private Long artistId;
     private String name;
     private LocalDateTime releasedYear;
 }

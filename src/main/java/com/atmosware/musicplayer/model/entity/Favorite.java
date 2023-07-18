@@ -5,8 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
-import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -14,8 +14,9 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@SuperBuilder
 @Table(name = "favorites")
-public class Favorite extends BaseEntity{
+public class Favorite extends BaseEntity {
     @ManyToMany
     @JoinTable(
             name = "favorite_album",

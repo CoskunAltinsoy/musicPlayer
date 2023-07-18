@@ -1,13 +1,14 @@
 package com.atmosware.musicplayer.service.impl;
 
+import com.atmosware.musicplayer.converter.AlbumConverter;
 import com.atmosware.musicplayer.dto.request.AlbumRequest;
 import com.atmosware.musicplayer.dto.response.AlbumResponse;
 import com.atmosware.musicplayer.exception.BusinessException;
 import com.atmosware.musicplayer.model.entity.Album;
 import com.atmosware.musicplayer.repository.AlbumRepository;
 import com.atmosware.musicplayer.service.AlbumService;
+import com.atmosware.musicplayer.service.ArtistService;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -18,11 +19,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AlbumServiceImpl implements AlbumService {
     private final AlbumRepository repository;
-    private final ModelMapper mapper;
+    private final ArtistService artistService;
+    private final AlbumConverter converter;
+
     @Override
     public void create(AlbumRequest request) {
         checkIfAlbumExistsByNameAndArtistId(request.getName(), request.getArtistId());
-        Album album = mapper.map(request, Album.class);
+        Album album = converter.convertToEntity(request);
         album.setId(0L);
         album.setCreatedDate(LocalDateTime.now());
         repository.save(album);
@@ -33,12 +36,13 @@ public class AlbumServiceImpl implements AlbumService {
         checkIfAlbumExistsById(id);
         Album album = repository.findById(id).orElseThrow();
         album.setUpdatedDate(LocalDateTime.now());
-        Album updatedAlbum = mapper.map(request, Album.class);
+        Album updatedAlbum = converter.convertToEntity(album);
         repository.save(updatedAlbum);
     }
 
     @Override
     public void delete(Long id) {
+        checkIfAlbumExistsById(id);
         repository.deleteById(id);
     }
 
@@ -46,41 +50,37 @@ public class AlbumServiceImpl implements AlbumService {
     public AlbumResponse getById(Long id) {
         checkIfAlbumExistsById(id);
         Album album = repository.findById(id).orElseThrow();
-        AlbumResponse response = mapper.map(album,AlbumResponse.class);
-        return response;
+        return converter.convertToResponse(album);
     }
 
     @Override
     public List<AlbumResponse> getAll() {
         List<Album> albums = repository.findAll();
-        List<AlbumResponse> responses = albums
+        return albums
                 .stream()
-                .map(album -> mapper.map(album,AlbumResponse.class))
+                .map(converter::convertToResponse)
                 .collect(Collectors.toList());
-        return responses;
     }
 
     @Override
     public AlbumResponse getByName(String name) {
-        checkIfAlbumExistsById(name);
+        checkIfAlbumExistsByName(name);
         Album album = repository.findByName(name);
-        AlbumResponse response = mapper.map(album, AlbumResponse.class);
-        return response;
+        return converter.convertToResponse(album);
     }
 
     @Override
     public List<AlbumResponse> findByReleasedYearGreaterThan(LocalDateTime year) {
         List<Album> albums = repository.findByReleasedYearGreaterThan(year);
-        List<AlbumResponse> responses = albums
+        return albums
                 .stream()
-                .map(album -> mapper.map(album, AlbumResponse.class))
+                .map(converter::convertToResponse)
                 .collect(Collectors.toList());
-        return responses;
     }
 
     private void checkIfAlbumExistsByNameAndArtistId(String name, Long artistId) {
-        if (!repository.existsByNameAndArtistId(name, artistId)) {
-            throw new BusinessException("There is no album by this name and artist");
+        if (repository.existsByNameAndArtist_Id(name, artistId)) {
+            throw new BusinessException("There is already an album with that name");
         }
     }
 
@@ -90,7 +90,7 @@ public class AlbumServiceImpl implements AlbumService {
         }
     }
 
-    private void checkIfAlbumExistsById(String name) {
+    private void checkIfAlbumExistsByName(String name) {
         if (!repository.existsByNameIgnoreCase(name)) {
             throw new BusinessException("There is no album by this name: " + name);
         }

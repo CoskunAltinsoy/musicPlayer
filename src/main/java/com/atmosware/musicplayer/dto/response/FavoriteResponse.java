@@ -1,10 +1,7 @@
 package com.atmosware.musicplayer.dto.response;
 
 import jakarta.validation.constraints.Min;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Set;
 
@@ -12,7 +9,9 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class FavoriteResponse {
+    private Long id;
     private Set<Long> albumIds;
     private Set<Long> artistIds;
     private Set<Long> playlistIds;

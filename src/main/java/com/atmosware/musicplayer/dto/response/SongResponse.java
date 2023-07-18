@@ -1,17 +1,16 @@
 package com.atmosware.musicplayer.dto.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Set;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-
+@Builder
 public class SongResponse {
+    private Long id;
     private Long albumId;
     private Long artistId;
     private Set<Long> genreIds;
