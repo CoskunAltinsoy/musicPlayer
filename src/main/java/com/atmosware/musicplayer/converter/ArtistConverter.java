@@ -12,24 +12,17 @@ import org.springframework.stereotype.Component;
 @Component
 public class ArtistConverter {
     public Artist convertToEntity(ArtistRequest request) {
-
         return Artist.builder()
                 .name(request.getName())
                 .description(request.getDescription())
                 .build();
     }
     public Artist convertToEntity(ArtistResponse response) {
-
         return Artist.builder()
                 .id(response.getId())
                 .name(response.getName())
                 .description(response.getDescription())
                 .build();
-    }
-    public Artist convertToEntity(Artist artist) {
-        Artist newArtist;
-        newArtist = artist;
-        return newArtist;
     }
     public ArtistResponse convertToResponse(Artist artist) {
 

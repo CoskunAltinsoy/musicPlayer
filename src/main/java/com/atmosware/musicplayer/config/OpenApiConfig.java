@@ -19,7 +19,7 @@ public class OpenApiConfig {
                         .title("Swagger UI")
                         .version("1.0.0")
                         .description("Music Player Swagger UI")
-                        .license(new License().name("DefineX Final Case Licence")));
+                        .license(new License().name("Atmosware Licence")));
 
     }
 }

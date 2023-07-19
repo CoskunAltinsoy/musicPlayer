@@ -29,9 +29,9 @@ class AlbumServiceImplTest {
         Artist artist = mapper.map(response, Artist.class);
 
         Album album = new Album();
-        album.setName("Ele Güne Karşı Yapayalnız.");
+        album.setName("Fesupanallah");
         album.setArtist(artist);
-        album.setReleasedYear(LocalDateTime.of(1990, Month.APRIL, 15, 00, 00));
+        album.setReleasedYear(LocalDateTime.of(1980, Month.MAY, 15, 00, 00));
 
         AlbumRequest request = mapper.map(album, AlbumRequest.class);
         service.create(request);

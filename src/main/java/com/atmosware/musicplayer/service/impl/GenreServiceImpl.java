@@ -33,7 +33,7 @@ public class GenreServiceImpl implements GenreService {
     public void update(GenreRequest request, Long id) {
         checkIfAlbumExistsByName(request.getName());
         Genre genre = repository.findById(id).orElseThrow();
-        Genre updatedGenre = converter.convertToEntity(genre);
+        Genre updatedGenre = converter.convertToEntity(request);
         updatedGenre.setId(id);
         updatedGenre.setUpdatedDate(LocalDateTime.now());
         repository.save(updatedGenre);

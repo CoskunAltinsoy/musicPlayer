@@ -4,40 +4,37 @@ import com.atmosware.musicplayer.dto.request.AlbumRequest;
 import com.atmosware.musicplayer.dto.response.AlbumResponse;
 import com.atmosware.musicplayer.model.entity.Album;
 import com.atmosware.musicplayer.model.entity.Artist;
-import org.springframework.core.convert.TypeDescriptor;
-import org.springframework.core.convert.converter.Converter;
-import org.springframework.core.convert.converter.GenericConverter;
 import org.springframework.stereotype.Component;
 
-import java.util.Set;
-
 @Component
-public class AlbumConverter{
+public class AlbumConverter {
 
     public Album convertToEntity(AlbumRequest request) {
+        Artist artist = new Artist();
 
-        return Album.builder()
-                .artist(new Artist()).id(request.getArtistId())
-                .name(request.getName())
-                .releasedYear(request.getReleasedYear())
-                .build();
+        Album album = new Album();
+        album.setArtist(artist);
+
+        album.getArtist().setId(request.getArtistId());
+        album.setName(request.getName());
+        album.setReleasedYear(request.getReleasedYear());
+
+        return album;
     }
+
     public Album convertToEntity(AlbumResponse response) {
+        Artist artist = new Artist();
 
-        return Album.builder()
-                .id(response.getId())
-                .artist(new Artist()).id(response.getArtistId())
-                .name(response.getName())
-                .releasedYear(response.getReleasedYear())
-                .build();
+        Album album = new Album();
+        album.setArtist(artist);
+
+        album.getArtist().setId(response.getArtistId());
+        album.setName(response.getName());
+        album.setReleasedYear(response.getReleasedYear());
+
+        return album;
     }
 
-    public Album convertToEntity(Album album) {
-
-        Album newAlbum;
-        newAlbum = album;
-        return newAlbum;
-    }
     public AlbumResponse convertToResponse(Album album) {
 
         return AlbumResponse.builder()
@@ -47,6 +44,7 @@ public class AlbumConverter{
                 .releasedYear(album.getReleasedYear())
                 .build();
     }
+
     public AlbumRequest convertToRequest(Album album) {
 
         return AlbumRequest.builder()

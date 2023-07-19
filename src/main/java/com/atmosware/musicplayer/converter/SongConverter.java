@@ -4,13 +4,9 @@ import com.atmosware.musicplayer.dto.request.GenreRequest;
 import com.atmosware.musicplayer.dto.request.SongRequest;
 import com.atmosware.musicplayer.dto.response.GenreResponse;
 import com.atmosware.musicplayer.dto.response.SongResponse;
-import com.atmosware.musicplayer.model.entity.Album;
-import com.atmosware.musicplayer.model.entity.Artist;
 import com.atmosware.musicplayer.model.entity.Genre;
 import com.atmosware.musicplayer.model.entity.Song;
 import org.springframework.stereotype.Component;
-
-import java.util.HashSet;
 
 @Component
 public class SongConverter {
@@ -24,6 +20,7 @@ public class SongConverter {
         song.setName(request.getName());
         return song;
     }
+
     public Song convertToEntity(SongResponse response) {
 
         Song song = new Song();
@@ -34,23 +31,17 @@ public class SongConverter {
         song.setName(response.getName());
         return song;
     }
-    public Song convertToEntity(Song song) {
 
-        Song newSong;
-        newSong = song;
-        return newSong;
-    }
-    public GenreResponse convertToResponse(Genre genre) {
-
-        return GenreResponse.builder()
-                .id(genre.getId())
-                .name(genre.getName())
+    public SongResponse convertToResponse(Song song) {
+        return SongResponse.builder()
+                .id(song.getId())
+                .name(song.getName())
                 .build();
     }
-    public GenreRequest convertToRequest(Genre genre) {
 
-        return GenreRequest.builder()
-                .name(genre.getName())
+    public SongResponse convertToRequest(Song song) {
+        return SongResponse.builder()
+                .name(song.getName())
                 .build();
     }
 }
