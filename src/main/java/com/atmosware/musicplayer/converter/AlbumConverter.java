@@ -34,16 +34,9 @@ public class AlbumConverter{
 
     public Album convertToEntity(Album album) {
 
-        return Album.builder()
-                .id(album.getId())
-                .createdDate(album.getCreatedDate())
-                .updatedDate(album.getUpdatedDate())
-                .name(album.getName())
-                .releasedYear(album.getReleasedYear())
-                .songs(album.getSongs())
-                .artist(album.getArtist())
-                .favorites(album.getFavorites())
-                .build();
+        Album newAlbum;
+        newAlbum = album;
+        return newAlbum;
     }
     public AlbumResponse convertToResponse(Album album) {
 

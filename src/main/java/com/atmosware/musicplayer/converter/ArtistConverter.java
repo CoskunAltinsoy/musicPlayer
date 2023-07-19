@@ -6,6 +6,7 @@ import com.atmosware.musicplayer.dto.response.AlbumResponse;
 import com.atmosware.musicplayer.dto.response.ArtistResponse;
 import com.atmosware.musicplayer.model.entity.Album;
 import com.atmosware.musicplayer.model.entity.Artist;
+import com.atmosware.musicplayer.model.entity.Song;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -26,20 +27,9 @@ public class ArtistConverter {
                 .build();
     }
     public Artist convertToEntity(Artist artist) {
-
-        return Artist.builder()
-                .id(artist.getId())
-                .createdDate(artist.getCreatedDate())
-                .updatedDate(artist.getUpdatedDate())
-                .name(artist.getName())
-                .description(artist.getDescription())
-                .isVerified(artist.isVerified())
-                .numberOfAlbum(artist.getNumberOfAlbum())
-                .numberOfSongs(artist.getNumberOfSongs())
-                .albums(artist.getAlbums())
-                .songs(artist.getSongs())
-                .favorites(artist.getFavorites())
-                .build();
+        Artist newArtist;
+        newArtist = artist;
+        return newArtist;
     }
     public ArtistResponse convertToResponse(Artist artist) {
 

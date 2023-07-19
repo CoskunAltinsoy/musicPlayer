@@ -12,6 +12,5 @@ import java.util.Set;
 public class PlaylistResponse {
     private Long id;
     private Long userId;
-    private Set<Long> songIds;
     private String name;
 }

@@ -35,8 +35,9 @@ public class AlbumServiceImpl implements AlbumService {
     public void update(AlbumRequest request, Long id) {
         checkIfAlbumExistsById(id);
         Album album = repository.findById(id).orElseThrow();
-        album.setUpdatedDate(LocalDateTime.now());
         Album updatedAlbum = converter.convertToEntity(album);
+        updatedAlbum.setId(id);
+        updatedAlbum.setUpdatedDate(LocalDateTime.now());
         repository.save(updatedAlbum);
     }
 

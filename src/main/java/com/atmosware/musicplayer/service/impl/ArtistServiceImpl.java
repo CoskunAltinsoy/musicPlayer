@@ -22,12 +22,12 @@ public class ArtistServiceImpl implements ArtistService {
     @Override
     public void create(ArtistRequest request) {
         Artist artist = converter.convertToEntity(request);
-        int numberOfSongs = artist.getSongs().size();
-        int numberOfAlbums = artist.getAlbums().size();
+        //int numberOfSongs = artist.getSongs().size();
+        //int numberOfAlbums = artist.getAlbums().size();
         artist.setId(0L);
         artist.setVerified(true);
-        artist.setNumberOfSongs(numberOfSongs);
-        artist.setNumberOfAlbum(numberOfAlbums);
+        //artist.setNumberOfSongs(numberOfSongs);
+        //artist.setNumberOfAlbum(numberOfAlbums);
         artist.setCreatedDate(LocalDateTime.now());
         repository.save(artist);
     }
@@ -35,12 +35,13 @@ public class ArtistServiceImpl implements ArtistService {
     @Override
     public void update(ArtistRequest request, Long id) {
         Artist artist = repository.findById(id).orElseThrow();
-        artist.setUpdatedDate(LocalDateTime.now());
         Artist updatedArtist = converter.convertToEntity(request);
-        int numberOfSongs = artist.getSongs().size();
-        int numberOfAlbums = artist.getAlbums().size();
-        updatedArtist.setNumberOfSongs(numberOfSongs);
-        updatedArtist.setNumberOfAlbum(numberOfAlbums);
+        updatedArtist.setId(id);
+        updatedArtist.setUpdatedDate(LocalDateTime.now());
+        //int numberOfSongs = artist.getSongs().size();
+        //int numberOfAlbums = artist.getAlbums().size();
+        //updatedArtist.setNumberOfSongs(numberOfSongs);
+        //updatedArtist.setNumberOfAlbum(numberOfAlbums);
         repository.save(updatedArtist);
     }
 

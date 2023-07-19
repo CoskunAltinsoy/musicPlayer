@@ -5,6 +5,7 @@ import com.atmosware.musicplayer.dto.request.GenreRequest;
 import com.atmosware.musicplayer.dto.response.AlbumResponse;
 import com.atmosware.musicplayer.dto.response.GenreResponse;
 import com.atmosware.musicplayer.model.entity.Album;
+import com.atmosware.musicplayer.model.entity.Artist;
 import com.atmosware.musicplayer.model.entity.Genre;
 import org.springframework.stereotype.Component;
 
@@ -24,13 +25,9 @@ public class GenreConverter {
     }
     public Genre convertToEntity(Genre genre) {
 
-        return Genre.builder()
-                .id(genre.getId())
-                .createdDate(genre.getCreatedDate())
-                .updatedDate(genre.getUpdatedDate())
-                .name(genre.getName())
-                .songs(genre.getSongs())
-                .build();
+        Genre newGenre;
+        newGenre = genre;
+        return newGenre;
     }
     public GenreResponse convertToResponse(Genre genre) {
 
