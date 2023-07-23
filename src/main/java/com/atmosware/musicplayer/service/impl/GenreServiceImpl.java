@@ -33,10 +33,8 @@ public class GenreServiceImpl implements GenreService {
     public void update(GenreRequest request, Long id) {
         checkIfAlbumExistsByName(request.getName());
         Genre genre = repository.findById(id).orElseThrow();
-        Genre updatedGenre = converter.convertToEntity(request);
-        updatedGenre.setId(id);
-        updatedGenre.setUpdatedDate(LocalDateTime.now());
-        repository.save(updatedGenre);
+        genre.setUpdatedDate(LocalDateTime.now());
+        repository.save(genre);
     }
 
     @Override
@@ -59,6 +57,11 @@ public class GenreServiceImpl implements GenreService {
                 .stream()
                 .map(converter::convertToResponse)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Genre findById(Long id) {
+        return repository.findById(id).orElseThrow();
     }
 
     private void checkIfAlbumExistsByName(String name) {

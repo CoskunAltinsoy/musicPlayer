@@ -1,8 +1,11 @@
 package com.atmosware.musicplayer.controller;
 
-import com.atmosware.musicplayer.dto.request.AlbumRequest;
-import com.atmosware.musicplayer.dto.response.AlbumResponse;
-import com.atmosware.musicplayer.service.AlbumService;
+import com.atmosware.musicplayer.dto.request.ArtistRequest;
+import com.atmosware.musicplayer.dto.request.GenreRequest;
+import com.atmosware.musicplayer.dto.response.ArtistResponse;
+import com.atmosware.musicplayer.dto.response.GenreResponse;
+import com.atmosware.musicplayer.service.ArtistService;
+import com.atmosware.musicplayer.service.GenreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,40 +14,35 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/albums")
-public class AlbumsController {
-    private final AlbumService service;
+@RequestMapping("/api/genres")
+public class GenresController {
+    private final GenreService service;
 
     @PostMapping
-    public ResponseEntity<Void> create(@RequestBody AlbumRequest request){
+    public ResponseEntity<Void> create(@RequestBody GenreRequest request){
         service.create(request);
         return (ResponseEntity<Void>) ResponseEntity.ok();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@RequestBody AlbumRequest request, @PathVariable Long id){
+    public ResponseEntity<Void> update(@RequestBody GenreRequest request, @PathVariable Long id){
         service.update(request,id);
         return (ResponseEntity<Void>) ResponseEntity.ok();
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.delete(id);
         return (ResponseEntity<Void>) ResponseEntity.ok();
     }
 
-    @GetMapping("/id/{id}")
-    public AlbumResponse getById(@PathVariable Long id) {
+    @GetMapping("/{id}")
+    public GenreResponse getById(@PathVariable Long id) {
         return service.getById(id);
     }
 
     @GetMapping()
-    public List<AlbumResponse> getAll() {
+    public List<GenreResponse> getAll() {
         return service.getAll();
-    }
-    @GetMapping("/name/{name}")
-    public AlbumResponse getByName(@PathVariable String name) {
-        return service.getByName(name);
     }
 }

@@ -17,29 +17,14 @@ import java.util.Set;
 @SuperBuilder
 @Table(name = "favorites")
 public class Favorite extends BaseEntity {
-    @ManyToMany
-    @JoinTable(
-            name = "favorite_album",
-            joinColumns = @JoinColumn(name = "favorite_id"),
-            inverseJoinColumns = @JoinColumn(name = "album_id")
-    )
-    private Set<Album> albums;
 
     @ManyToMany
     @JoinTable(
-            name = "favorite_artist",
+            name = "favorite_song",
             joinColumns = @JoinColumn(name = "favorite_id"),
-            inverseJoinColumns = @JoinColumn(name = "artist_id")
+            inverseJoinColumns = @JoinColumn(name = "song_id")
     )
-    private Set<Artist> artists;
-
-    @ManyToMany
-    @JoinTable(
-            name = "favorite_playlist",
-            joinColumns = @JoinColumn(name = "favorite_id"),
-            inverseJoinColumns = @JoinColumn(name = "playlist_id")
-    )
-    private Set<Playlist> playlists;
+    private Set<Song> songs;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Builder
 public class AlbumResponse {
     private Long id;
-    private Long artistId;
+    private ArtistResponse artistResponse;
     private String name;
     private LocalDateTime releasedYear;
 }

@@ -3,8 +3,10 @@ package com.atmosware.musicplayer.service.impl;
 import com.atmosware.musicplayer.converter.AlbumConverter;
 import com.atmosware.musicplayer.dto.request.AlbumRequest;
 import com.atmosware.musicplayer.dto.response.AlbumResponse;
+import com.atmosware.musicplayer.dto.response.ArtistResponse;
 import com.atmosware.musicplayer.exception.BusinessException;
 import com.atmosware.musicplayer.model.entity.Album;
+import com.atmosware.musicplayer.model.entity.Artist;
 import com.atmosware.musicplayer.repository.AlbumRepository;
 import com.atmosware.musicplayer.service.AlbumService;
 import com.atmosware.musicplayer.service.ArtistService;
@@ -25,8 +27,10 @@ public class AlbumServiceImpl implements AlbumService {
     @Override
     public void create(AlbumRequest request) {
         checkIfAlbumExistsByNameAndArtistId(request.getName(), request.getArtistId());
+        Artist artist = artistService.findById(request.getArtistId());
         Album album = converter.convertToEntity(request);
         album.setId(0L);
+        album.setArtist(artist);
         album.setCreatedDate(LocalDateTime.now());
         repository.save(album);
     }
@@ -34,11 +38,12 @@ public class AlbumServiceImpl implements AlbumService {
     @Override
     public void update(AlbumRequest request, Long id) {
         checkIfAlbumExistsById(id);
+        Artist artist = artistService.findById(request.getArtistId());
         Album album = repository.findById(id).orElseThrow();
-        Album updatedAlbum = converter.convertToEntity(request);
-        updatedAlbum.setId(id);
-        updatedAlbum.setUpdatedDate(LocalDateTime.now());
-        repository.save(updatedAlbum);
+        album.setArtist(artist);
+        album.setName(request.getName());
+        album.setUpdatedDate(LocalDateTime.now());
+        repository.save(album);
     }
 
     @Override
@@ -51,7 +56,10 @@ public class AlbumServiceImpl implements AlbumService {
     public AlbumResponse getById(Long id) {
         checkIfAlbumExistsById(id);
         Album album = repository.findById(id).orElseThrow();
-        return converter.convertToResponse(album);
+        ArtistResponse artistResponse = artistService.getById(album.getArtist().getId());
+        AlbumResponse albumResponse = converter.convertToResponse(album);
+        albumResponse.setArtistResponse(artistResponse);
+        return albumResponse;
     }
 
     @Override
@@ -59,24 +67,42 @@ public class AlbumServiceImpl implements AlbumService {
         List<Album> albums = repository.findAll();
         return albums
                 .stream()
-                .map(converter::convertToResponse)
-                .collect(Collectors.toList());
+                .map(album -> {
+                    AlbumResponse albumResponse = converter.convertToResponse(album);
+                    ArtistResponse artistResponse = artistService.getById(album.getArtist().getId());
+                    albumResponse.setArtistResponse(artistResponse);
+                    return albumResponse;
+                })
+                .toList();
     }
 
     @Override
     public AlbumResponse getByName(String name) {
         checkIfAlbumExistsByName(name);
-        Album album = repository.findByName(name);
-        return converter.convertToResponse(album);
+        Album album = repository.findByNameIgnoreCase(name);
+        ArtistResponse artistResponse = artistService.getByName(album.getArtist().getName());
+        AlbumResponse albumResponse = converter.convertToResponse(album);
+        albumResponse.setArtistResponse(artistResponse);
+        return albumResponse;
     }
 
     @Override
-    public List<AlbumResponse> findByReleasedYearGreaterThan(LocalDateTime year) {
+    public List<AlbumResponse> getByReleasedYearGreaterThan(LocalDateTime year) {
         List<Album> albums = repository.findByReleasedYearGreaterThan(year);
         return albums
                 .stream()
-                .map(converter::convertToResponse)
-                .collect(Collectors.toList());
+                .map(album -> {
+                    AlbumResponse albumResponse = converter.convertToResponse(album);
+                    ArtistResponse artistResponse = artistService.getById(album.getArtist().getId());
+                    albumResponse.setArtistResponse(artistResponse);
+                    return albumResponse;
+                })
+                .toList();
+    }
+
+    @Override
+    public Album findById(Long id) {
+        return repository.findById(id).orElseThrow();
     }
 
     private void checkIfAlbumExistsByNameAndArtistId(String name, Long artistId) {

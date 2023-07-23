@@ -2,6 +2,7 @@ package com.atmosware.musicplayer.service;
 
 import com.atmosware.musicplayer.dto.request.GenreRequest;
 import com.atmosware.musicplayer.dto.response.GenreResponse;
+import com.atmosware.musicplayer.model.entity.Genre;
 
 import java.util.List;
 
@@ -15,4 +16,5 @@ public interface GenreService {
     GenreResponse getById(Long id);
 
     List<GenreResponse> getAll();
+    Genre findById(Long id);
 }

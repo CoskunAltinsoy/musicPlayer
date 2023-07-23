@@ -22,12 +22,8 @@ public class ArtistServiceImpl implements ArtistService {
     @Override
     public void create(ArtistRequest request) {
         Artist artist = converter.convertToEntity(request);
-        //int numberOfSongs = artist.getSongs().size();
-        //int numberOfAlbums = artist.getAlbums().size();
         artist.setId(0L);
         artist.setVerified(true);
-        //artist.setNumberOfSongs(numberOfSongs);
-        //artist.setNumberOfAlbum(numberOfAlbums);
         artist.setCreatedDate(LocalDateTime.now());
         repository.save(artist);
     }
@@ -35,14 +31,10 @@ public class ArtistServiceImpl implements ArtistService {
     @Override
     public void update(ArtistRequest request, Long id) {
         Artist artist = repository.findById(id).orElseThrow();
-        Artist updatedArtist = converter.convertToEntity(request);
-        updatedArtist.setId(id);
-        updatedArtist.setUpdatedDate(LocalDateTime.now());
-        //int numberOfSongs = artist.getSongs().size();
-        //int numberOfAlbums = artist.getAlbums().size();
-        //updatedArtist.setNumberOfSongs(numberOfSongs);
-        //updatedArtist.setNumberOfAlbum(numberOfAlbums);
-        repository.save(updatedArtist);
+        artist.setName(request.getName());
+        artist.setDescription(request.getDescription());
+        artist.setUpdatedDate(LocalDateTime.now());
+        repository.save(artist);
     }
 
     @Override
@@ -69,5 +61,10 @@ public class ArtistServiceImpl implements ArtistService {
     public ArtistResponse getByName(String name) {
         Artist artist = repository.findByNameIgnoreCase(name);
         return converter.convertToResponse(artist);
+    }
+
+    @Override
+    public Artist findById(Long id) {
+        return repository.findById(id).orElseThrow();
     }
 }

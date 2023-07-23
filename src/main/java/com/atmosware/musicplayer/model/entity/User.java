@@ -38,6 +38,12 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Favorite> favorites;
 
+    @OneToMany(mappedBy = "userIdFollower", fetch = FetchType.LAZY)
+    private List<Fallow> fallowers;
+
+    @OneToMany(mappedBy = "userIdFallowed", fetch = FetchType.LAZY)
+    private List<Fallow> fallowed;
+
     @ManyToMany()
     @JoinTable(
             name = "user_role",
@@ -45,5 +51,4 @@ public class User extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles;
-
 }

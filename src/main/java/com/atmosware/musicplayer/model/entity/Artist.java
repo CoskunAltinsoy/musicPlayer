@@ -26,10 +26,4 @@ public class Artist extends BaseEntity {
 
     @OneToMany(mappedBy = "artist", fetch = FetchType.LAZY)
     private List<Album> albums;
-
-    @OneToMany(mappedBy = "artist", fetch = FetchType.LAZY)
-    private List<Song> songs;
-
-    @ManyToMany(mappedBy = "artists")
-    private Set<Favorite> favorites;
 }

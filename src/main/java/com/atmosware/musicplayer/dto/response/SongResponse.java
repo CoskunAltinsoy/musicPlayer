@@ -11,8 +11,7 @@ import java.util.Set;
 @Builder
 public class SongResponse {
     private Long id;
-    private Long albumId;
-    private Long artistId;
-    private Set<Long> genreIds;
+    private AlbumResponse album;
+    private Set<GenreResponse> genres;
     private String name;
 }

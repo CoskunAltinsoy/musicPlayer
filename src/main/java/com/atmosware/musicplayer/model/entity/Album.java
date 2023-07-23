@@ -25,7 +25,4 @@ public class Album extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "artist_id")
     private Artist artist;
-
-    @ManyToMany(mappedBy = "albums")
-    private Set<Favorite> favorites;
 }

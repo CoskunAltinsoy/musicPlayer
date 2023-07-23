@@ -14,8 +14,6 @@ import java.util.Set;
 public class SongRequest {
     @Min(0)
     private Long albumId;
-    @Min(0)
-    private Long artistId;
     private Set<Long> genreIds;
     @NotBlank
     private String name;

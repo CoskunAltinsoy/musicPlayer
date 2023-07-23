@@ -2,6 +2,7 @@ package com.atmosware.musicplayer.service;
 
 import com.atmosware.musicplayer.dto.request.ArtistRequest;
 import com.atmosware.musicplayer.dto.response.ArtistResponse;
+import com.atmosware.musicplayer.model.entity.Artist;
 
 import java.util.List;
 
@@ -17,4 +18,6 @@ public interface ArtistService {
     List<ArtistResponse> getAll();
 
     ArtistResponse getByName(String name);
+
+    Artist findById(Long id);
 }

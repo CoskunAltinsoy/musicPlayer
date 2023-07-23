@@ -16,5 +16,4 @@ public interface SongService {
 
     List<SongResponse> getAll();
     List<SongResponse> getAllByAlbum(Long albumId);
-    List<SongResponse> getAllByArtist(Long artistId);
 }

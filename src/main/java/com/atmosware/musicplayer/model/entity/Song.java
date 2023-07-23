@@ -26,10 +26,6 @@ public class Song extends BaseEntity {
     @JoinColumn(name = "album_id")
     private Album album;
 
-    @ManyToOne()
-    @JoinColumn(name = "artist_id")
-    private Artist artist;
-
     @OneToMany(mappedBy = "song", fetch = FetchType.LAZY)
     private List<Comment> comments;
 
@@ -43,4 +39,7 @@ public class Song extends BaseEntity {
 
     @ManyToMany(mappedBy = "songs", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Playlist> playlists;
+
+    @ManyToMany(mappedBy = "songs")
+    private Set<Favorite> favorites;
 }

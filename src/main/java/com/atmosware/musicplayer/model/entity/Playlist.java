@@ -30,7 +30,4 @@ public class Playlist extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "song_id")
     )
     private Set<Song> songs;
-
-    @ManyToMany(mappedBy = "playlists")
-    private Set<Favorite> favorites;
 }
