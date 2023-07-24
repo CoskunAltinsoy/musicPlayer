@@ -16,5 +16,4 @@ public class PlaylistRequest {
     private Long userId;
     @NotBlank
     private String name;
-
 }
