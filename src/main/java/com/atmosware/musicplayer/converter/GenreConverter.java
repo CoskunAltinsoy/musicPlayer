@@ -20,11 +20,6 @@ public class GenreConverter {
                 .name(response.getName())
                 .build();
     }
-    public Set<Genre> convertToEntityResponseList(Set<GenreResponse> responses) {
-        return responses.stream()
-                .map(response -> convertToEntity(response))
-                .collect(Collectors.toSet());
-    }
 
     public GenreResponse convertToResponse(Genre genre) {
         return GenreResponse.builder()

@@ -7,22 +7,16 @@ import com.atmosware.musicplayer.dto.response.AlbumResponse;
 import com.atmosware.musicplayer.dto.response.GenreResponse;
 import com.atmosware.musicplayer.dto.response.SongResponse;
 import com.atmosware.musicplayer.model.entity.Album;
-import com.atmosware.musicplayer.model.entity.Artist;
 import com.atmosware.musicplayer.model.entity.Genre;
 import com.atmosware.musicplayer.model.entity.Song;
-import com.atmosware.musicplayer.repository.ArtistRepository;
 import com.atmosware.musicplayer.repository.SongRepository;
 import com.atmosware.musicplayer.service.AlbumService;
-import com.atmosware.musicplayer.service.ArtistService;
 import com.atmosware.musicplayer.service.GenreService;
 import com.atmosware.musicplayer.service.SongService;
-import com.fasterxml.jackson.core.base.GeneratorBase;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -107,7 +101,8 @@ public class SongServiceImpl implements SongService {
                 })
                 .toList();
     }
-    private Set<Genre> setGenreIds(SongRequest request){
+
+    private Set<Genre> setGenreIds(SongRequest request) {
         return request.getGenreIds().stream()
                 .map(genreId -> {
                     return genreService.findById(genreId);

@@ -27,7 +27,7 @@ public class User extends BaseEntity {
     private String lastName;
     private String nationalIdentity;
     private LocalDateTime dateOfBirth;
-    //private String resetToken;
+    private String resetPasswordToken;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Comment> comments;

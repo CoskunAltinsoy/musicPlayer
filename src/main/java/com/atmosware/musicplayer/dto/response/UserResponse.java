@@ -22,5 +22,5 @@ public class UserResponse {
     private LocalDateTime dateOfBirth;
     private List<Long> commentIds;
     private List<Long> playlistIds;
-    private Set<Long> roleIds;
+    private Set<RoleResponse> roles;
 }

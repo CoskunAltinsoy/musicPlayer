@@ -20,7 +20,7 @@ import java.util.Set;
 public class Role extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
-    private RoleType roleName;
+    private RoleType name;
 
     @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<User> users;
