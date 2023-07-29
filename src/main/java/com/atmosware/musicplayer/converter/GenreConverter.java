@@ -32,4 +32,9 @@ public class GenreConverter {
                 .map(genre -> convertToResponse(genre))
                 .collect(Collectors.toSet());
     }
+    public Set<Genre> convertToEntityList(Set<GenreResponse> responses) {
+        return responses.stream()
+                .map(response -> convertToEntity(response))
+                .collect(Collectors.toSet());
+    }
 }

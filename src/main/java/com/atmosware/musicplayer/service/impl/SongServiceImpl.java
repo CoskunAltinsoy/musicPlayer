@@ -102,6 +102,11 @@ public class SongServiceImpl implements SongService {
                 .toList();
     }
 
+    @Override
+    public Song findById(Long id) {
+        return repository.findById(id).orElseThrow();
+    }
+
     private Set<Genre> setGenreIds(SongRequest request) {
         return request.getGenreIds().stream()
                 .map(genreId -> {

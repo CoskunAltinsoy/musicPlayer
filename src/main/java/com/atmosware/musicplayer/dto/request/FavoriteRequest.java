@@ -11,9 +11,6 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 public class FavoriteRequest {
-    private Set<Long> albumIds;
-    private Set<Long> artistIds;
-    private Set<Long> playlistIds;
     @Min(0)
     private Long userId;
 }

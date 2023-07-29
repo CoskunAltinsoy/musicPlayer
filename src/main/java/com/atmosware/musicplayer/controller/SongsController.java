@@ -7,6 +7,7 @@ import com.atmosware.musicplayer.dto.response.SongResponse;
 import com.atmosware.musicplayer.service.SongService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,17 +17,17 @@ import java.util.List;
 @RequestMapping("/api/songs")
 public class SongsController {
     private final SongService service;
-
+    @PreAuthorize("hasAuthority('ADMIN') or hasRole('ARTIST')")
     @PostMapping
     public void create(@RequestBody SongRequest request){
         service.create(request);
     }
-
+    @PreAuthorize("hasAuthority('ADMIN') or hasRole('ARTIST')")
     @PutMapping("/{id}")
     public void update(@RequestBody SongRequest request, @PathVariable Long id){
         service.update(request,id);
     }
-
+    @PreAuthorize("hasAuthority('ADMIN') or hasRole('ARTIST')")
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         service.delete(id);

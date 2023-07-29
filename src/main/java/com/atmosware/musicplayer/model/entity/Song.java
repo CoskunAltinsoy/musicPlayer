@@ -26,9 +26,6 @@ public class Song extends BaseEntity {
     @JoinColumn(name = "album_id")
     private Album album;
 
-    @OneToMany(mappedBy = "song", fetch = FetchType.LAZY)
-    private List<Comment> comments;
-
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
             name = "song_genre",

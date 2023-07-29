@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -26,4 +27,7 @@ public class Artist extends BaseEntity {
 
     @OneToMany(mappedBy = "artist", fetch = FetchType.LAZY)
     private List<Album> albums;
+
+    @ManyToMany(mappedBy = "followedArtists")
+    private Set<User> followers = new HashSet<>();
 }

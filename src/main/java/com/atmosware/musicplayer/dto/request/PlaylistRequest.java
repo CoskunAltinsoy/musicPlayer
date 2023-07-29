@@ -12,8 +12,6 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 public class PlaylistRequest {
-    @Min(0)
-    private Long userId;
     @NotBlank
     private String name;
 }

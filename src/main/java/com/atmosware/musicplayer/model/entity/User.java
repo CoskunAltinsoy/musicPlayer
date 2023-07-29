@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -28,9 +29,8 @@ public class User extends BaseEntity {
     private String nationalIdentity;
     private LocalDateTime dateOfBirth;
     private String resetPasswordToken;
-
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<Comment> comments;
+    private boolean demandArtist;
+    private boolean approveArtist;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Playlist> playlists;
@@ -38,13 +38,24 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Favorite> favorites;
 
-    @OneToMany(mappedBy = "userIdFollower", fetch = FetchType.LAZY)
-    private List<Fallow> fallowers;
+    @ManyToMany
+    @JoinTable(
+            name = "user_follows_artist",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "artist_id")
+    )
+    private Set<Artist> followedArtists = new HashSet<>();
 
-    @OneToMany(mappedBy = "userIdFallowed", fetch = FetchType.LAZY)
-    private List<Fallow> fallowed;
+    @ManyToMany
+    @JoinTable(name = "user_follows_user",
+            joinColumns = @JoinColumn(name = "follower_id"),
+            inverseJoinColumns = @JoinColumn(name = "following_id"))
+    private Set<User> followed;
 
-    @ManyToMany()
+    @ManyToMany(mappedBy = "followed")
+    private Set<User> followers;
+
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),

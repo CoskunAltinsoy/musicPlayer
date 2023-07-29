@@ -5,6 +5,7 @@ import com.atmosware.musicplayer.dto.response.AlbumResponse;
 import com.atmosware.musicplayer.service.AlbumService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,24 +15,21 @@ import java.util.List;
 @RequestMapping("/api/albums")
 public class AlbumsController {
     private final AlbumService service;
-
+    @PreAuthorize("hasAuthority('ADMIN') or hasRole('ARTIST')")
     @PostMapping
-    public ResponseEntity<Void> create(@RequestBody AlbumRequest request){
+    public void create(@RequestBody AlbumRequest request){
         service.create(request);
-        return (ResponseEntity<Void>) ResponseEntity.ok();
     }
-
+    @PreAuthorize("hasAuthority('ADMIN') or hasRole('ARTIST')")
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@RequestBody AlbumRequest request, @PathVariable Long id){
+    public void update(@RequestBody AlbumRequest request, @PathVariable Long id){
         service.update(request,id);
-        return (ResponseEntity<Void>) ResponseEntity.ok();
     }
-
+    @PreAuthorize("hasAuthority('ADMIN') or hasRole('ARTIST')")
     @DeleteMapping("/{id}")
     @ResponseStatus
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public void delete(@PathVariable Long id) {
         service.delete(id);
-        return (ResponseEntity<Void>) ResponseEntity.ok();
     }
 
     @GetMapping("/id/{id}")

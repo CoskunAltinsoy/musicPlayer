@@ -1,4 +1,4 @@
-package com.atmosware.musicplayer.util.token;
+package com.atmosware.musicplayer.util.security.token;
 
 import org.springframework.stereotype.Component;
 

@@ -22,6 +22,6 @@ public class Role extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private RoleType name;
 
-    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "roles")
     private Set<User> users;
 }

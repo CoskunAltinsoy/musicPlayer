@@ -9,7 +9,9 @@ import com.atmosware.musicplayer.service.RoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +22,7 @@ public class RoleServiceImpl implements RoleService {
     public void create(RoleRequest request) {
         Role role = converter.convertToEntity(request);
         role.setId(0L);
+        role.setCreatedDate(LocalDateTime.now());
         repository.save(role);
     }
     @Override

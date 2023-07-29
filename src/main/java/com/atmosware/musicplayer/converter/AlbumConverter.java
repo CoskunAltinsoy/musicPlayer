@@ -38,13 +38,4 @@ public class AlbumConverter {
                 .releasedYear(album.getReleasedYear())
                 .build();
     }
-
-    public AlbumRequest convertToRequest(Album album) {
-
-        return AlbumRequest.builder()
-                .artistId(album.getArtist().getId())
-                .name(album.getName())
-                .releasedYear(album.getReleasedYear())
-                .build();
-    }
 }

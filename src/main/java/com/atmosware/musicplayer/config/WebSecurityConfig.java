@@ -6,6 +6,7 @@ import com.atmosware.musicplayer.security.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -54,11 +55,28 @@ public class WebSecurityConfig {
     }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-        http.csrf(csrf -> csrf.disable()).cors(cors -> cors.disable())
+        http.csrf(csrf -> csrf.disable())
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/api/users/**").permitAll()
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/users/register/**","/api/users/login/**").permitAll()
+                        .requestMatchers("/api/users/create-demand-artist/**",
+                                "/api/users/create-approval-artist/**").hasAuthority("USER")
+                        .requestMatchers("/api/users/id/**").hasAuthority("ADMIN")
+                        .requestMatchers("/api/users/getall").hasAuthority("ADMIN")
+                        .requestMatchers("/api/users/create-demand-artist/**").hasAuthority("USER")
+                        .requestMatchers("/api/users/create-approval-artist/**").hasAuthority("USER")
+                        .requestMatchers("/api/users/change-password/**").hasAuthority("USER")
+                        .requestMatchers("/api/users/forgot-password/**").hasAuthority("USER")
+                        .requestMatchers("/api/users/reset-password/**").hasAuthority("USER")
+                        .requestMatchers("/api/users/follow-user/**").hasAuthority("USER")
+                        .requestMatchers("/api/users/unfollow-user/**").hasAuthority("USER")
+                        .requestMatchers("/api/users/follow-artist/**").hasAuthority("USER")
+                        .requestMatchers("/api/users/unfollow-artist/**").hasAuthority("USER")
+                        .requestMatchers(HttpMethod.DELETE,"/api/users/**").hasAuthority("ADMIN")
                         .requestMatchers("/api/test/**").permitAll()
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
+                        .requestMatchers("/api/roles/**","/api/roles").hasAuthority("ADMIN")
                         .anyRequest().authenticated());
 
         http.authenticationProvider(authenticationProvider());

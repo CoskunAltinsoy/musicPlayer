@@ -9,5 +9,5 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class RoleResponse {
-    private RoleType name;
+    private String name;
 }

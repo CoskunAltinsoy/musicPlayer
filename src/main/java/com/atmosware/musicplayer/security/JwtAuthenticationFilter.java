@@ -28,16 +28,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private CustomUserDetailService customUserDetailService;
 
     @Override
-    protected void doFilterInternal(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            FilterChain filterChain
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain
     ) throws ServletException, IOException {
         try{
             String jwt = parseJwt(request);
             if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
                 String email = jwtUtils.getUserNameFromJwtToken(jwt);
-
                 UserDetails userDetails = customUserDetailService.loadUserByUsername(email);
                 UsernamePasswordAuthenticationToken authenticationToken =
                         new UsernamePasswordAuthenticationToken(
@@ -46,14 +42,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                 userDetails.getAuthorities()
                         );
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
         }
         catch (Exception e){
             log.error("Cannot set user authentication: {}", e);
         }
-
         filterChain.doFilter(request, response);
     }
 

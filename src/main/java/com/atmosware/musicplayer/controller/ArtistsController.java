@@ -8,6 +8,7 @@ import com.atmosware.musicplayer.service.AlbumService;
 import com.atmosware.musicplayer.service.ArtistService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,29 +19,25 @@ import java.util.List;
 public class ArtistsController {
     private final ArtistService service;
 
+    @PreAuthorize("hasAuthority('ADMIN') or hasRole('ARTIST')")
     @PostMapping
-    public ResponseEntity<Void> create(@RequestBody ArtistRequest request){
+    public void create(@RequestBody ArtistRequest request){
         service.create(request);
-        return (ResponseEntity<Void>) ResponseEntity.ok();
     }
-
+    @PreAuthorize("hasAuthority('ADMIN') or hasRole('ARTIST')")
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@RequestBody ArtistRequest request, @PathVariable Long id){
+    public void update(@RequestBody ArtistRequest request, @PathVariable Long id){
         service.update(request,id);
-        return (ResponseEntity<Void>) ResponseEntity.ok();
     }
-
+    @PreAuthorize("hasAuthority('ADMIN') or hasRole('ARTIST')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public void delete(@PathVariable Long id) {
         service.delete(id);
-        return (ResponseEntity<Void>) ResponseEntity.ok();
     }
-
     @GetMapping("/{id}")
     public ArtistResponse getById(@PathVariable Long id) {
         return service.getById(id);
     }
-
     @GetMapping()
     public List<ArtistResponse> getAll() {
         return service.getAll();
