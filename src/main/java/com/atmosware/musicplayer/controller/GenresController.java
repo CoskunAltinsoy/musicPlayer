@@ -6,6 +6,8 @@ import com.atmosware.musicplayer.dto.response.ArtistResponse;
 import com.atmosware.musicplayer.dto.response.GenreResponse;
 import com.atmosware.musicplayer.service.ArtistService;
 import com.atmosware.musicplayer.service.GenreService;
+import com.atmosware.musicplayer.util.result.DataResult;
+import com.atmosware.musicplayer.util.result.Result;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,29 +22,26 @@ public class GenresController {
     private final GenreService service;
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<Void> create(@RequestBody GenreRequest request){
-        service.create(request);
-        return (ResponseEntity<Void>) ResponseEntity.ok();
+    public Result create(@RequestBody GenreRequest request){
+        return service.create(request);
     }
     @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@RequestBody GenreRequest request, @PathVariable Long id){
-        service.update(request,id);
-        return (ResponseEntity<Void>) ResponseEntity.ok();
+    public Result update(@RequestBody GenreRequest request, @PathVariable Long id){
+        return service.update(request,id);
     }
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        service.delete(id);
-        return (ResponseEntity<Void>) ResponseEntity.ok();
+    public Result delete(@PathVariable Long id) {
+        return service.delete(id);
     }
     @GetMapping("/{id}")
-    public GenreResponse getById(@PathVariable Long id) {
+    public DataResult<GenreResponse> getById(@PathVariable Long id) {
         return service.getById(id);
     }
 
     @GetMapping()
-    public List<GenreResponse> getAll() {
+    public DataResult<List<GenreResponse>> getAll() {
         return service.getAll();
     }
 }

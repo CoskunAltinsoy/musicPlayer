@@ -6,6 +6,7 @@ import com.atmosware.musicplayer.dto.request.SongRequest;
 import com.atmosware.musicplayer.dto.response.AlbumResponse;
 import com.atmosware.musicplayer.dto.response.GenreResponse;
 import com.atmosware.musicplayer.dto.response.SongResponse;
+import com.atmosware.musicplayer.exception.BusinessException;
 import com.atmosware.musicplayer.model.entity.Album;
 import com.atmosware.musicplayer.model.entity.Genre;
 import com.atmosware.musicplayer.model.entity.Song;
@@ -13,6 +14,9 @@ import com.atmosware.musicplayer.repository.SongRepository;
 import com.atmosware.musicplayer.service.AlbumService;
 import com.atmosware.musicplayer.service.GenreService;
 import com.atmosware.musicplayer.service.SongService;
+import com.atmosware.musicplayer.util.constant.Message;
+import com.atmosware.musicplayer.util.result.DataResult;
+import com.atmosware.musicplayer.util.result.Result;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +35,7 @@ public class SongServiceImpl implements SongService {
     private final GenreConverter genreConverter;
 
     @Override
-    public void create(SongRequest request) {
+    public Result create(SongRequest request) {
         Album album = albumService.findById(request.getAlbumId());
         Set<Genre> genres = setGenreIds(request);
         Song song = converter.convertToEntity(request);
@@ -40,10 +44,12 @@ public class SongServiceImpl implements SongService {
         song.setGenres(genres);
         song.setCreatedDate(LocalDateTime.now());
         repository.save(song);
+        return new Result(Message.Song.successful);
     }
 
     @Override
-    public void update(SongRequest request, Long id) {
+    public Result update(SongRequest request, Long id) {
+        checkIfSongExistsById(id);
         Album album = albumService.findById(request.getAlbumId());
         Set<Genre> genres = setGenreIds(request);
         Song song = repository.findById(id).orElseThrow();
@@ -52,58 +58,65 @@ public class SongServiceImpl implements SongService {
         song.setGenres(genres);
         song.setUpdatedDate(LocalDateTime.now());
         repository.save(song);
+        return new Result(Message.Song.successful);
     }
 
     @Override
-    public void delete(Long id) {
+    public Result delete(Long id) {
+        checkIfSongExistsById(id);
         repository.deleteById(id);
+        return new Result(Message.Song.successful);
     }
 
     @Override
-    public SongResponse getById(Long id) {
+    public DataResult<SongResponse> getById(Long id) {
+        checkIfSongExistsById(id);
         Song song = repository.findById(id).orElseThrow();
-        AlbumResponse albumResponse = albumService.getById(song.getAlbum().getId());
+        var albumResponse = albumService.getById(song.getAlbum().getId());
         Set<GenreResponse> genreResponses = genreConverter.convertToResponseList(song.getGenres());
         SongResponse songResponse = converter.convertToResponse(song);
-        songResponse.setAlbum(albumResponse);
+        songResponse.setAlbum(albumResponse.getData());
         songResponse.setGenres(genreResponses);
-        return songResponse;
+        return new DataResult<SongResponse>(songResponse);
     }
 
     @Override
-    public List<SongResponse> getAll() {
+    public DataResult<List<SongResponse>> getAll() {
         List<Song> songs = repository.findAll();
-        return songs
+        var responses = songs
                 .stream()
                 .map(song -> {
-                    AlbumResponse albumResponse = albumService.getById(song.getAlbum().getId());
+                    var albumResponse = albumService.getById(song.getAlbum().getId());
                     Set<GenreResponse> genreResponses = genreConverter.convertToResponseList(song.getGenres());
                     SongResponse songResponse = converter.convertToResponse(song);
-                    songResponse.setAlbum(albumResponse);
+                    songResponse.setAlbum(albumResponse.getData());
                     songResponse.setGenres(genreResponses);
                     return songResponse;
                 })
                 .toList();
+        return new DataResult<List<SongResponse>>(Message.Song.successful,responses);
     }
 
     @Override
-    public List<SongResponse> getAllByAlbum(Long albumId) {
+    public DataResult<List<SongResponse>> getAllByAlbum(Long albumId) {
         List<Song> songs = repository.findByAlbum_Id(albumId);
-        return songs
+        var responses = songs
                 .stream()
                 .map(song -> {
-                    AlbumResponse albumResponse = albumService.getById(song.getAlbum().getId());
+                    var albumResponse = albumService.getById(song.getAlbum().getId());
                     Set<GenreResponse> genreResponses = genreConverter.convertToResponseList(song.getGenres());
                     SongResponse songResponse = converter.convertToResponse(song);
-                    songResponse.setAlbum(albumResponse);
+                    songResponse.setAlbum(albumResponse.getData());
                     songResponse.setGenres(genreResponses);
                     return songResponse;
                 })
                 .toList();
+        return new DataResult<List<SongResponse>>(Message.Song.successful,responses);
     }
 
     @Override
     public Song findById(Long id) {
+        checkIfSongExistsById(id);
         return repository.findById(id).orElseThrow();
     }
 
@@ -113,5 +126,10 @@ public class SongServiceImpl implements SongService {
                     return genreService.findById(genreId);
                 })
                 .collect(Collectors.toSet());
+    }
+    private void checkIfSongExistsById(Long id) {
+        if (!repository.existsById(id)) {
+            throw new BusinessException(Message.Song.notExist);
+        }
     }
 }

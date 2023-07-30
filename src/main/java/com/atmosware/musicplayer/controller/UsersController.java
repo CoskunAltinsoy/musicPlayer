@@ -5,6 +5,8 @@ import com.atmosware.musicplayer.dto.response.AuthResponse;
 import com.atmosware.musicplayer.dto.response.TokenResetResponse;
 import com.atmosware.musicplayer.dto.response.UserResponse;
 import com.atmosware.musicplayer.service.UserService;
+import com.atmosware.musicplayer.util.result.DataResult;
+import com.atmosware.musicplayer.util.result.Result;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -18,77 +20,77 @@ public class UsersController {
     private final UserService service;
 
     @PostMapping("/login/{login}")
-    public AuthResponse login(@RequestBody AuthRequest request) {
+    public DataResult<AuthResponse> login(@RequestBody AuthRequest request) {
         return service.login(request);
     }
 
     @PostMapping("/register/{register}")
-    public void register(@RequestBody UserRequest request) {
-        service.register(request);
+    public Result register(@RequestBody UserRequest request) {
+        return service.register(request);
     }
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/create-demand-artist/{createDemandArtist}")
-    public void createDemandArtist(@PathVariable Long id) {
-        service.createDemandArtist(id);
+    public Result createDemandArtist(@PathVariable Long id) {
+        return service.createDemandArtist(id);
     }
 
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/create-approval-artist/{createApprovalArtist}")
-    public void createApprovalArtist(@PathVariable Long id) {
-        service.createApprovalArtist(id);
+    public Result createApprovalArtist(@PathVariable Long id) {
+        return service.createApprovalArtist(id);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/id/{id}")
-    public UserResponse getById(@PathVariable Long id) {
+    public DataResult<UserResponse> getById(@PathVariable Long id) {
         return service.getById(id);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/getall")
-    public List<UserResponse> getAll() {
+    public DataResult<List<UserResponse>> getAll() {
         return service.getAll();
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        service.delete(id);
+    public Result delete(@PathVariable Long id) {
+        return service.delete(id);
     }
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/change-password")
-    public void changePassword(@RequestBody PasswordRequest request) {
-        service.changePassword(request);
+    public Result changePassword(@RequestBody PasswordRequest request) {
+        return service.changePassword(request);
     }
 
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/forgot-password")
-    public TokenResetResponse forgotPassword(@RequestBody ResetPasswordRequest request) {
+    public DataResult<TokenResetResponse> forgotPassword(@RequestBody ResetPasswordRequest request) {
         return service.forgotPassword(request);
     }
     @PreAuthorize("hasAuthority('USER')")
     @PutMapping("/reset-password")
-    public void resetPassword(@RequestParam String token, @RequestBody TokenPasswordRequest request) {
-        service.resetPassword(token, request);
+    public Result resetPassword(@RequestParam String token, @RequestBody TokenPasswordRequest request) {
+        return service.resetPassword(token, request);
     }
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/follow-user/{followerId}/{followedId}")
-    public void followUser(@PathVariable Long followerId, @PathVariable Long followedId) {
-        service.followUser(followerId, followedId);
+    public Result followUser(@PathVariable Long followerId, @PathVariable Long followedId) {
+        return service.followUser(followerId, followedId);
     }
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/unfollow-user/{followerId}/{followedId}")
-    public void unfollowUser(@PathVariable Long followerId, @PathVariable Long followedId) {
-        service.unfollowUser(followerId, followedId);
+    public Result unfollowUser(@PathVariable Long followerId, @PathVariable Long followedId) {
+        return service.unfollowUser(followerId, followedId);
     }
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/follow-artist/{followerId}/{followedArtistId}")
-    public void followArtist(@PathVariable Long followerId, @PathVariable Long followedArtistId) {
-        service.followArtist(followerId, followedArtistId);
+    public Result followArtist(@PathVariable Long followerId, @PathVariable Long followedArtistId) {
+        return service.followArtist(followerId, followedArtistId);
     }
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/unfollow-artist/{followerId}/{followedArtistId}")
-    public void unfollowArtist(@PathVariable Long followerId, @PathVariable Long followedArtistId) {
-        service.unfollowArtist(followerId, followedArtistId);
+    public Result unfollowArtist(@PathVariable Long followerId, @PathVariable Long followedArtistId) {
+        return service.unfollowArtist(followerId, followedArtistId);
     }
 }

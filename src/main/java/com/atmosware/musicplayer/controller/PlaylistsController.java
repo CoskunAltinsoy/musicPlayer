@@ -5,6 +5,8 @@ import com.atmosware.musicplayer.dto.request.SongRequest;
 import com.atmosware.musicplayer.dto.response.PlaylistResponse;
 import com.atmosware.musicplayer.dto.response.SongResponse;
 import com.atmosware.musicplayer.service.PlaylistService;
+import com.atmosware.musicplayer.util.result.DataResult;
+import com.atmosware.musicplayer.util.result.Result;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,31 +19,31 @@ public class PlaylistsController {
     private final PlaylistService service;
 
     @PostMapping
-    public void create(@RequestBody PlaylistRequest request){
-        service.create(request);
+    public Result create(@RequestBody PlaylistRequest request){
+        return service.create(request);
     }
     @PostMapping("/{songId}/{playlistId}")
-    public void createSongToPlaylist(@PathVariable Long songId, @PathVariable Long playlistId){
-        service.createSongToPlaylist(songId,playlistId);
+    public Result createSongToPlaylist(@PathVariable Long songId, @PathVariable Long playlistId){
+        return service.createSongToPlaylist(songId,playlistId);
     }
     @PutMapping("/{id}")
-    public void update(@RequestBody PlaylistRequest request, @PathVariable Long id){
-        service.update(request,id);
+    public Result update(@RequestBody PlaylistRequest request, @PathVariable Long id){
+        return service.update(request,id);
     }
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        service.delete(id);
+    public Result delete(@PathVariable Long id) {
+        return service.delete(id);
     }
     @DeleteMapping("/{songId}/{playlistId}")
-    public void deleteSongToPlaylist(@PathVariable Long songId, @PathVariable Long playlistId) {
-        service.deleteSongToPlaylist(songId,playlistId);
+    public Result deleteSongToPlaylist(@PathVariable Long songId, @PathVariable Long playlistId) {
+        return service.deleteSongToPlaylist(songId,playlistId);
     }
     @GetMapping("/{id}")
-    public PlaylistResponse getById(@PathVariable Long id) {
+    public DataResult<PlaylistResponse> getById(@PathVariable Long id) {
         return service.getById(id);
     }
     @GetMapping()
-    public List<PlaylistResponse> getAll() {
+    public DataResult<List<PlaylistResponse>> getAll() {
         return service.getAll();
     }
 }

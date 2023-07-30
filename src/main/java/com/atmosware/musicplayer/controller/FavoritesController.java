@@ -2,6 +2,8 @@ package com.atmosware.musicplayer.controller;
 
 import com.atmosware.musicplayer.dto.response.FavoriteResponse;
 import com.atmosware.musicplayer.service.FavoritesService;
+import com.atmosware.musicplayer.util.result.DataResult;
+import com.atmosware.musicplayer.util.result.Result;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,19 +16,19 @@ public class FavoritesController {
     private final FavoritesService service;
 
     @PostMapping("/{songId}/{favoriteId}")
-    public void createSongToFavorite(@PathVariable Long songId, @PathVariable Long favoriteId){
-        service.createSongToFavorite(songId,favoriteId);
+    public Result createSongToFavorite(@PathVariable Long songId, @PathVariable Long favoriteId){
+        return service.createSongToFavorite(songId,favoriteId);
     }
     @DeleteMapping("/{songId}/{favoriteId}")
-    public void deleteSongToFavorite(@PathVariable Long songId, @PathVariable Long favoriteId){
-        service.deleteSongToFavorite(songId,favoriteId);
+    public Result deleteSongToFavorite(@PathVariable Long songId, @PathVariable Long favoriteId){
+        return service.deleteSongToFavorite(songId,favoriteId);
     }
     @GetMapping("/{id}")
-    public FavoriteResponse getById(@PathVariable Long id) {
+    public DataResult<FavoriteResponse> getById(@PathVariable Long id) {
         return service.getById(id);
     }
     @GetMapping()
-    public List<FavoriteResponse> getAll() {
+    public DataResult<List<FavoriteResponse>> getAll() {
         return service.getAll();
     }
 }

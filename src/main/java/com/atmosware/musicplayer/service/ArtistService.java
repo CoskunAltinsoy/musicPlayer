@@ -3,21 +3,23 @@ package com.atmosware.musicplayer.service;
 import com.atmosware.musicplayer.dto.request.ArtistRequest;
 import com.atmosware.musicplayer.dto.response.ArtistResponse;
 import com.atmosware.musicplayer.model.entity.Artist;
+import com.atmosware.musicplayer.util.result.DataResult;
+import com.atmosware.musicplayer.util.result.Result;
 
 import java.util.List;
 
 public interface ArtistService {
-    void create(ArtistRequest request);
+    Result create(ArtistRequest request);
 
-    void update(ArtistRequest request, Long id);
+    Result update(ArtistRequest request, Long id);
 
-    void delete(Long id);
+    Result delete(Long id);
 
-    ArtistResponse getById(Long id);
+    DataResult<ArtistResponse> getById(Long id);
 
-    List<ArtistResponse> getAll();
+    DataResult<List<ArtistResponse>> getAll();
 
-    ArtistResponse getByName(String name);
+    DataResult<ArtistResponse> getByName(String name);
 
     Artist findById(Long id);
 }

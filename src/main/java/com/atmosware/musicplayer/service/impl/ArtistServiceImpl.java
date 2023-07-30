@@ -9,7 +9,11 @@ import com.atmosware.musicplayer.model.entity.User;
 import com.atmosware.musicplayer.repository.ArtistRepository;
 import com.atmosware.musicplayer.service.ArtistService;
 import com.atmosware.musicplayer.service.UserService;
+import com.atmosware.musicplayer.util.constant.Message;
+import com.atmosware.musicplayer.util.result.DataResult;
+import com.atmosware.musicplayer.util.result.Result;
 import com.atmosware.musicplayer.util.security.AuthenticationFacade;
+import io.netty.handler.codec.MessageAggregationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -29,7 +33,7 @@ public class ArtistServiceImpl implements ArtistService {
 
 
     @Override
-    public void create(ArtistRequest request) {
+    public Result create(ArtistRequest request) {
         User user = userService.findByEmail(authenticationFacade.getUsername());
         checkIfApprovalArtistTrue(user);
         Artist artist = converter.convertToEntity(request);
@@ -37,44 +41,51 @@ public class ArtistServiceImpl implements ArtistService {
         artist.setVerified(true);
         artist.setCreatedDate(LocalDateTime.now());
         repository.save(artist);
+        return new Result(Message.Artist.successful);
     }
 
     @Override
-    public void update(ArtistRequest request, Long id) {
+    public Result update(ArtistRequest request, Long id) {
+        checkIfArtistExistsById(id);
         Artist artist = repository.findById(id).orElseThrow();
         artist.setName(request.getName());
         artist.setDescription(request.getDescription());
         artist.setUpdatedDate(LocalDateTime.now());
         repository.save(artist);
+        return new Result(Message.Artist.successful);
     }
 
     @Override
-    public void delete(Long id) {
+    public Result delete(Long id) {
         checkIfArtistExistsById(id);
         repository.deleteById(id);
+        return new Result(Message.Artist.successful);
     }
 
     @Override
-    public ArtistResponse getById(Long id) {
+    public DataResult<ArtistResponse> getById(Long id) {
         checkIfArtistExistsById(id);
         Artist artist = repository.findById(id).orElseThrow();
-        return converter.convertToResponse(artist);
+        var artistResponse = converter.convertToResponse(artist);
+        return new DataResult<ArtistResponse>(Message.Artist.successful,artistResponse);
     }
 
     @Override
-    public List<ArtistResponse> getAll() {
+    public DataResult<List<ArtistResponse>> getAll() {
         List<Artist> artists = repository.findAll();
-        return artists
+        var responses = artists
                 .stream()
                 .map(converter::convertToResponse)
                 .collect(Collectors.toList());
+        return new DataResult<List<ArtistResponse>>(Message.Artist.successful,responses);
     }
 
     @Override
-    public ArtistResponse getByName(String name) {
+    public DataResult<ArtistResponse> getByName(String name) {
         checkIfArtistExistsByName(name);
         Artist artist = repository.findByNameIgnoreCase(name);
-        return converter.convertToResponse(artist);
+        var artistResponse = converter.convertToResponse(artist);
+        return new DataResult<ArtistResponse>(Message.Artist.successful,artistResponse);
     }
 
     @Override
@@ -84,17 +95,17 @@ public class ArtistServiceImpl implements ArtistService {
     }
     private void checkIfApprovalArtistTrue(User user){
         if (user.isApproveArtist() != true){
-            throw new BusinessException("This user have not approved yet.");
+            throw new BusinessException(Message.Artist.notApprovedYet);
         }
     }
     private void checkIfArtistExistsById(Long id){
         if (!repository.existsById(id)){
-            throw new BusinessException("There is no such an artist.");
+            throw new BusinessException(Message.Artist.notExist);
         }
     }
     private void checkIfArtistExistsByName(String name){
         if (!repository.existsByName(name)){
-            throw new BusinessException("There is no such an artist.");
+            throw new BusinessException(Message.Artist.notExist);
         }
     }
 }

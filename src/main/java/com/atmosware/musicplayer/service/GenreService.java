@@ -3,18 +3,20 @@ package com.atmosware.musicplayer.service;
 import com.atmosware.musicplayer.dto.request.GenreRequest;
 import com.atmosware.musicplayer.dto.response.GenreResponse;
 import com.atmosware.musicplayer.model.entity.Genre;
+import com.atmosware.musicplayer.util.result.DataResult;
+import com.atmosware.musicplayer.util.result.Result;
 
 import java.util.List;
 
 public interface GenreService {
-    void create(GenreRequest request);
+    Result create(GenreRequest request);
 
-    void update(GenreRequest request, Long id);
+    Result update(GenreRequest request, Long id);
 
-    void delete(Long id);
+    Result delete(Long id);
 
-    GenreResponse getById(Long id);
+    DataResult<GenreResponse> getById(Long id);
 
-    List<GenreResponse> getAll();
+    DataResult<List<GenreResponse>> getAll();
     Genre findById(Long id);
 }

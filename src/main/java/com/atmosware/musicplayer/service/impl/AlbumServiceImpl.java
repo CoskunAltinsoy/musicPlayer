@@ -10,6 +10,9 @@ import com.atmosware.musicplayer.model.entity.Artist;
 import com.atmosware.musicplayer.repository.AlbumRepository;
 import com.atmosware.musicplayer.service.AlbumService;
 import com.atmosware.musicplayer.service.ArtistService;
+import com.atmosware.musicplayer.util.constant.Message;
+import com.atmosware.musicplayer.util.result.DataResult;
+import com.atmosware.musicplayer.util.result.Result;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +28,7 @@ public class AlbumServiceImpl implements AlbumService {
     private final AlbumConverter converter;
 
     @Override
-    public void create(AlbumRequest request) {
+    public Result create(AlbumRequest request) {
         checkIfAlbumExistsByNameAndArtistId(request.getName(), request.getArtistId());
         Artist artist = artistService.findById(request.getArtistId());
         Album album = converter.convertToEntity(request);
@@ -33,10 +36,11 @@ public class AlbumServiceImpl implements AlbumService {
         album.setArtist(artist);
         album.setCreatedDate(LocalDateTime.now());
         repository.save(album);
+        return new Result(Message.Album.successful);
     }
 
     @Override
-    public void update(AlbumRequest request, Long id) {
+    public Result update(AlbumRequest request, Long id) {
         checkIfAlbumExistsById(id);
         Artist artist = artistService.findById(request.getArtistId());
         Album album = repository.findById(id).orElseThrow();
@@ -44,64 +48,69 @@ public class AlbumServiceImpl implements AlbumService {
         album.setName(request.getName());
         album.setUpdatedDate(LocalDateTime.now());
         repository.save(album);
+        return new Result(Message.Album.successful);
     }
 
     @Override
-    public void delete(Long id) {
+    public Result delete(Long id) {
         checkIfAlbumExistsById(id);
         repository.deleteById(id);
+        return new Result(Message.Album.successful);
     }
 
     @Override
-    public AlbumResponse getById(Long id) {
+    public DataResult<AlbumResponse> getById(Long id) {
         checkIfAlbumExistsById(id);
         Album album = repository.findById(id).orElseThrow();
-        ArtistResponse artistResponse = artistService.getById(album.getArtist().getId());
+        var artistResponse = artistService.getById(album.getArtist().getId());
         AlbumResponse albumResponse = converter.convertToResponse(album);
-        albumResponse.setArtistResponse(artistResponse);
-        return albumResponse;
+        albumResponse.setArtistResponse(artistResponse.getData());
+        return new DataResult<AlbumResponse>(Message.Album.successful,albumResponse);
     }
 
     @Override
-    public List<AlbumResponse> getAll() {
+    public DataResult<List<AlbumResponse>> getAll() {
         List<Album> albums = repository.findAll();
-        return albums
+        var responses = albums
                 .stream()
                 .map(album -> {
                     AlbumResponse albumResponse = converter.convertToResponse(album);
-                    ArtistResponse artistResponse = artistService.getById(album.getArtist().getId());
-                    albumResponse.setArtistResponse(artistResponse);
+                    var artistResponse = artistService.getById(album.getArtist().getId());
+                    albumResponse.setArtistResponse(artistResponse.getData());
                     return albumResponse;
                 })
                 .toList();
+        return new DataResult<List<AlbumResponse>>(Message.Album.successful,responses);
     }
 
     @Override
-    public AlbumResponse getByName(String name) {
+    public DataResult<AlbumResponse> getByName(String name) {
         checkIfAlbumExistsByName(name);
         Album album = repository.findByNameIgnoreCase(name);
-        ArtistResponse artistResponse = artistService.getByName(album.getArtist().getName());
+        var artistResponse = artistService.getByName(album.getArtist().getName());
         AlbumResponse albumResponse = converter.convertToResponse(album);
-        albumResponse.setArtistResponse(artistResponse);
-        return albumResponse;
+        albumResponse.setArtistResponse(artistResponse.getData());
+        return new DataResult<AlbumResponse>(Message.Album.successful,albumResponse);
     }
 
     @Override
-    public List<AlbumResponse> getByReleasedYearGreaterThan(LocalDateTime year) {
+    public DataResult<List<AlbumResponse>> getByReleasedYearGreaterThan(LocalDateTime year) {
         List<Album> albums = repository.findByReleasedYearGreaterThan(year);
-        return albums
+        var responses = albums
                 .stream()
                 .map(album -> {
                     AlbumResponse albumResponse = converter.convertToResponse(album);
-                    ArtistResponse artistResponse = artistService.getById(album.getArtist().getId());
-                    albumResponse.setArtistResponse(artistResponse);
+                    var artistResponse = artistService.getById(album.getArtist().getId());
+                    albumResponse.setArtistResponse(artistResponse.getData());
                     return albumResponse;
                 })
                 .toList();
+        return new DataResult<List<AlbumResponse>>(Message.Album.successful,responses);
     }
 
     @Override
     public Album findById(Long id) {
+        checkIfAlbumExistsById(id);
         return repository.findById(id).orElseThrow();
     }
 

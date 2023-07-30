@@ -3,6 +3,9 @@ package com.atmosware.musicplayer.controller;
 import com.atmosware.musicplayer.dto.request.AlbumRequest;
 import com.atmosware.musicplayer.dto.response.AlbumResponse;
 import com.atmosware.musicplayer.service.AlbumService;
+import com.atmosware.musicplayer.util.result.DataResult;
+import com.atmosware.musicplayer.util.result.Result;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,32 +20,32 @@ public class AlbumsController {
     private final AlbumService service;
     @PreAuthorize("hasAuthority('ADMIN') or hasRole('ARTIST')")
     @PostMapping
-    public void create(@RequestBody AlbumRequest request){
-        service.create(request);
+    public Result create(@RequestBody AlbumRequest request){
+         return service.create(request);
     }
     @PreAuthorize("hasAuthority('ADMIN') or hasRole('ARTIST')")
     @PutMapping("/{id}")
-    public void update(@RequestBody AlbumRequest request, @PathVariable Long id){
-        service.update(request,id);
+    public Result update(@RequestBody AlbumRequest request, @PathVariable Long id){
+        return service.update(request,id);
     }
     @PreAuthorize("hasAuthority('ADMIN') or hasRole('ARTIST')")
     @DeleteMapping("/{id}")
     @ResponseStatus
-    public void delete(@PathVariable Long id) {
-        service.delete(id);
+    public Result delete(@PathVariable Long id) {
+        return service.delete(id);
     }
 
     @GetMapping("/id/{id}")
-    public AlbumResponse getById(@PathVariable Long id) {
+    public DataResult<AlbumResponse> getById(@PathVariable Long id) {
         return service.getById(id);
     }
 
     @GetMapping()
-    public List<AlbumResponse> getAll() {
+    public DataResult<List<AlbumResponse>> getAll() {
         return service.getAll();
     }
     @GetMapping("/name/{name}")
-    public AlbumResponse getByName(@PathVariable String name) {
+    public DataResult<AlbumResponse> getByName(@PathVariable String name) {
         return service.getByName(name);
     }
 }

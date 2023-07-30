@@ -5,24 +5,26 @@ import com.atmosware.musicplayer.dto.response.AuthResponse;
 import com.atmosware.musicplayer.dto.response.TokenResetResponse;
 import com.atmosware.musicplayer.dto.response.UserResponse;
 import com.atmosware.musicplayer.model.entity.User;
+import com.atmosware.musicplayer.util.result.DataResult;
+import com.atmosware.musicplayer.util.result.Result;
 
 import java.util.List;
 
 public interface UserService {
-    public AuthResponse login(AuthRequest request);
-    public void register(UserRequest request);
-    public void createDemandArtist(Long id);
-    public void createApprovalArtist(Long id);
-    public UserResponse getById(Long id);
-    public List<UserResponse> getAll();
-    public void delete(Long id);
-    public void changePassword(PasswordRequest request);
-    public void resetPassword(String token, TokenPasswordRequest request);
-    public TokenResetResponse forgotPassword(ResetPasswordRequest request);
-    public void followUser(Long followerId, Long followedId);
-    public void unfollowUser(Long followerId, Long followedId);
-    public void followArtist(Long followerId, Long followedArtistId);
-    public void unfollowArtist(Long followerId, Long followedArtistId);
-    public User findById(Long id);
-    public User findByEmail(String email);
+    DataResult<AuthResponse> login(AuthRequest request);
+    Result register(UserRequest request);
+    Result createDemandArtist(Long id);
+    Result createApprovalArtist(Long id);
+    DataResult<UserResponse> getById(Long id);
+    DataResult<List<UserResponse>> getAll();
+    Result delete(Long id);
+    Result changePassword(PasswordRequest request);
+    Result resetPassword(String token, TokenPasswordRequest request);
+    DataResult<TokenResetResponse> forgotPassword(ResetPasswordRequest request);
+    Result followUser(Long followerId, Long followedId);
+    Result unfollowUser(Long followerId, Long followedId);
+    Result followArtist(Long followerId, Long followedArtistId);
+    Result unfollowArtist(Long followerId, Long followedArtistId);
+    User findById(Long id);
+    User findByEmail(String email);
 }

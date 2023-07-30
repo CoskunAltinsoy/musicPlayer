@@ -3,24 +3,27 @@ package com.atmosware.musicplayer.service;
 import com.atmosware.musicplayer.dto.request.AlbumRequest;
 import com.atmosware.musicplayer.dto.response.AlbumResponse;
 import com.atmosware.musicplayer.model.entity.Album;
+import com.atmosware.musicplayer.util.result.DataResult;
+import com.atmosware.musicplayer.util.result.Result;
+import org.hibernate.boot.model.relational.Database;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 public interface AlbumService {
-    void create(AlbumRequest request);
+    Result create(AlbumRequest request);
 
-    void update(AlbumRequest request, Long id);
+    Result update(AlbumRequest request, Long id);
 
-    void delete(Long id);
+    Result delete(Long id);
 
-    AlbumResponse getById(Long id);
+    DataResult<AlbumResponse> getById(Long id);
 
-    List<AlbumResponse> getAll();
+    DataResult<List<AlbumResponse>> getAll();
 
-    AlbumResponse getByName(String name);
+    DataResult<AlbumResponse> getByName(String name);
 
-    List<AlbumResponse> getByReleasedYearGreaterThan(LocalDateTime year);
+    DataResult<List<AlbumResponse>> getByReleasedYearGreaterThan(LocalDateTime year);
 
     Album findById(Long id);
 }

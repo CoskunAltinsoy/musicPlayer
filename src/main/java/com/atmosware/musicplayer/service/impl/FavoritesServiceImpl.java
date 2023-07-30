@@ -10,6 +10,9 @@ import com.atmosware.musicplayer.repository.FavoriteRepository;
 import com.atmosware.musicplayer.service.FavoritesService;
 import com.atmosware.musicplayer.service.SongService;
 import com.atmosware.musicplayer.service.UserService;
+import com.atmosware.musicplayer.util.constant.Message;
+import com.atmosware.musicplayer.util.result.DataResult;
+import com.atmosware.musicplayer.util.result.Result;
 import com.atmosware.musicplayer.util.security.AuthenticationFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,38 +30,40 @@ public class FavoritesServiceImpl implements FavoritesService {
     private final SongConverter songConverter;
 
     @Override
-    public void createSongToFavorite(Long songId, Long favoriteId) {
+    public Result createSongToFavorite(Long songId, Long favoriteId) {
         String email = authenticationFacade.getUsername();
         User user = userService.findByEmail(email);
         Song song = songService.findById(songId);
         Favorite favorite = new Favorite();
         favorite.setUser(user);
         favorite.getSongs().add(song);
+        return new Result(Message.Favorite.successful);
     }
 
     @Override
-    public void deleteSongToFavorite(Long songId, Long favoriteId) {
+    public Result deleteSongToFavorite(Long songId, Long favoriteId) {
         String email = authenticationFacade.getUsername();
         User user = userService.findByEmail(email);
         Song song = songService.findById(songId);
         Favorite favorite = new Favorite();
         favorite.setUser(user);
         favorite.getSongs().remove(song);
+        return new Result(Message.Favorite.successful);
     }
 
     @Override
-    public FavoriteResponse getById(Long id) {
+    public DataResult<FavoriteResponse> getById(Long id) {
         Favorite favorite = repository.findById(id).orElseThrow();
         Set<SongResponse> songResponses = songConverter.convertToResponseList(favorite.getSongs());
         FavoriteResponse favoriteResponse = new FavoriteResponse();
         favoriteResponse.setSongs(songResponses);
-        return favoriteResponse;
+        return new DataResult<FavoriteResponse>(favoriteResponse);
     }
 
     @Override
-    public List<FavoriteResponse> getAll() {
+    public DataResult<List<FavoriteResponse>> getAll() {
         List<Favorite> favorites = repository.findAll();
-        return favorites.stream()
+        var responses = favorites.stream()
                 .map(favorite -> {
                     Set<SongResponse> songResponses = songConverter.convertToResponseList(favorite.getSongs());
                     FavoriteResponse favoriteResponse = new FavoriteResponse();
@@ -66,5 +71,6 @@ public class FavoritesServiceImpl implements FavoritesService {
                     return favoriteResponse;
                 })
                 .toList();
+        return new DataResult<List<FavoriteResponse>>(Message.Favorite.successful,responses);
     }
 }
