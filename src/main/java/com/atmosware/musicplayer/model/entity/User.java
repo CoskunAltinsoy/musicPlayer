@@ -1,5 +1,6 @@
 package com.atmosware.musicplayer.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,6 +28,7 @@ public class User extends BaseEntity {
     private String firstName;
     private String lastName;
     private String nationalIdentity;
+
     private LocalDateTime dateOfBirth;
     private String resetPasswordToken;
     private boolean demandArtist;

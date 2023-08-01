@@ -3,6 +3,7 @@ package com.atmosware.musicplayer.dto.response;
 import com.atmosware.musicplayer.model.entity.Song;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.Set;
 
 @Getter
@@ -10,7 +11,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PlaylistResponse {
+public class PlaylistResponse implements Serializable {
     private Long id;
     private Set<SongResponse> songs;
     private String name;

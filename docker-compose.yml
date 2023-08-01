@@ -16,6 +16,11 @@ services:
       - sonarqube_extensions:/opt/sonarqube/extensions
       - sonarqube_bundled-plugins:/opt/sonarqube/lib/bundled-plugins
 
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+
   db:
     image: postgres
     networks:

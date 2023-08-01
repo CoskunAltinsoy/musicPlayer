@@ -1,7 +1,9 @@
 package com.atmosware.musicplayer.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
@@ -11,7 +13,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserResponse {
+public class UserResponse implements Serializable{
     private Long id;
     private String email;
     private String password;

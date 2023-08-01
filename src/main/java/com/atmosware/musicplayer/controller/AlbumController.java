@@ -5,9 +5,7 @@ import com.atmosware.musicplayer.dto.response.AlbumResponse;
 import com.atmosware.musicplayer.service.AlbumService;
 import com.atmosware.musicplayer.util.result.DataResult;
 import com.atmosware.musicplayer.util.result.Result;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,19 +14,19 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/albums")
-public class AlbumsController {
+public class AlbumController {
     private final AlbumService service;
-    @PreAuthorize("hasAuthority('ADMIN') or hasRole('ARTIST')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('ARTIST')")
     @PostMapping
     public Result create(@RequestBody AlbumRequest request){
          return service.create(request);
     }
-    @PreAuthorize("hasAuthority('ADMIN') or hasRole('ARTIST')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('ARTIST')")
     @PutMapping("/{id}")
     public Result update(@RequestBody AlbumRequest request, @PathVariable Long id){
         return service.update(request,id);
     }
-    @PreAuthorize("hasAuthority('ADMIN') or hasRole('ARTIST')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('ARTIST')")
     @DeleteMapping("/{id}")
     @ResponseStatus
     public Result delete(@PathVariable Long id) {

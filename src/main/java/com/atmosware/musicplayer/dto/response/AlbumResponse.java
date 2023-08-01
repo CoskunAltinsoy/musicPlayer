@@ -2,6 +2,7 @@ package com.atmosware.musicplayer.dto.response;
 
 import lombok.*;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Getter
@@ -9,7 +10,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AlbumResponse {
+public class AlbumResponse implements Serializable{
     private Long id;
     private ArtistResponse artistResponse;
     private String name;

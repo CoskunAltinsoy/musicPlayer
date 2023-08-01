@@ -16,7 +16,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
-public class UsersController {
+public class UserController {
     private final UserService service;
 
     @PostMapping("/login/{login}")
@@ -29,13 +29,13 @@ public class UsersController {
         return service.register(request);
     }
     @PreAuthorize("hasAuthority('USER')")
-    @PostMapping("/create-demand-artist/{createDemandArtist}")
+    @PostMapping("/create-demand-artist/{id}")
     public Result createDemandArtist(@PathVariable Long id) {
         return service.createDemandArtist(id);
     }
 
-    @PreAuthorize("hasAuthority('USER')")
-    @PostMapping("/create-approval-artist/{createApprovalArtist}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PostMapping("/create-approval-artist/{id}")
     public Result createApprovalArtist(@PathVariable Long id) {
         return service.createApprovalArtist(id);
     }
@@ -57,18 +57,18 @@ public class UsersController {
     public Result delete(@PathVariable Long id) {
         return service.delete(id);
     }
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     @PostMapping("/change-password")
     public Result changePassword(@RequestBody PasswordRequest request) {
         return service.changePassword(request);
     }
 
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     @PostMapping("/forgot-password")
     public DataResult<TokenResetResponse> forgotPassword(@RequestBody ResetPasswordRequest request) {
         return service.forgotPassword(request);
     }
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     @PutMapping("/reset-password")
     public Result resetPassword(@RequestParam String token, @RequestBody TokenPasswordRequest request) {
         return service.resetPassword(token, request);

@@ -10,24 +10,17 @@ import org.springframework.stereotype.Component;
 public class AlbumConverter {
 
     public Album convertToEntity(AlbumRequest request) {
-        Album album = new Album();
-        album.getArtist().setId(request.getArtistId());
-        album.setName(request.getName());
-        album.setReleasedYear(request.getReleasedYear());
-
-        return album;
+        return Album.builder()
+                .name(request.getName())
+                .releasedYear(request.getReleasedYear())
+                .build();
     }
 
     public Album convertToEntity(AlbumResponse response) {
-        Artist artist = new Artist();
-
-        Album album = new Album();
-        album.setArtist(artist);
-
-        album.setName(response.getName());
-        album.setReleasedYear(response.getReleasedYear());
-
-        return album;
+        return Album.builder()
+                .name(response.getName())
+                .releasedYear(response.getReleasedYear())
+                .build();
     }
 
     public AlbumResponse convertToResponse(Album album) {

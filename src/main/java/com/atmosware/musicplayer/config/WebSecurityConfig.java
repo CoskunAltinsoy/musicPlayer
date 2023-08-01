@@ -21,7 +21,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
+    @Autowired
     private final CustomUserDetailService customUserDetailService;
+    @Autowired
     private final AuthEntryPointJwt unauthorizedHandler;
 
     @Autowired
@@ -60,23 +62,26 @@ public class WebSecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/users/register/**","/api/users/login/**").permitAll()
-                        .requestMatchers("/api/users/create-demand-artist/**",
-                                "/api/users/create-approval-artist/**").hasAuthority("USER")
+                        .requestMatchers("/api/users/create-demand-artist/**").hasAuthority("USER")
+                        .requestMatchers("/api/users/create-approval-artist/**").hasAuthority("ADMIN")
                         .requestMatchers("/api/users/id/**").hasAuthority("ADMIN")
                         .requestMatchers("/api/users/getall").hasAuthority("ADMIN")
-                        .requestMatchers("/api/users/create-demand-artist/**").hasAuthority("USER")
-                        .requestMatchers("/api/users/create-approval-artist/**").hasAuthority("USER")
-                        .requestMatchers("/api/users/change-password/**").hasAuthority("USER")
-                        .requestMatchers("/api/users/forgot-password/**").hasAuthority("USER")
-                        .requestMatchers("/api/users/reset-password/**").hasAuthority("USER")
+                        .requestMatchers(HttpMethod.DELETE,"/api/users/**").hasAuthority("ADMIN")
+                        .requestMatchers("/api/users/change-password/**").hasAnyAuthority("USER", "ADMIN")
+                        .requestMatchers("/api/users/forgot-password/**").hasAnyAuthority("USER", "ADMIN")
+                        .requestMatchers("/api/users/reset-password/**").hasAnyAuthority("USER", "ADMIN")
                         .requestMatchers("/api/users/follow-user/**").hasAuthority("USER")
                         .requestMatchers("/api/users/unfollow-user/**").hasAuthority("USER")
                         .requestMatchers("/api/users/follow-artist/**").hasAuthority("USER")
                         .requestMatchers("/api/users/unfollow-artist/**").hasAuthority("USER")
-                        .requestMatchers(HttpMethod.DELETE,"/api/users/**").hasAuthority("ADMIN")
+
+                        .requestMatchers("/api/albums").hasAnyAuthority("ADMIN","ARTIST")
+                        .requestMatchers("/api/artists").hasAnyAuthority("ADMIN","ARTIST")
+                        .requestMatchers("/api/genres").hasAuthority("ADMIN")
+                        .requestMatchers("/api/songs").hasAnyAuthority("ADMIN","ARTIST")
                         .requestMatchers("/api/test/**").permitAll()
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
-                        .requestMatchers("/api/roles/**","/api/roles").hasAuthority("ADMIN")
+                        .requestMatchers("/api/roles/**","/api/roles").permitAll()
                         .anyRequest().authenticated());
 
         http.authenticationProvider(authenticationProvider());

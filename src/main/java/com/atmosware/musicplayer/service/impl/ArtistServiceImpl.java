@@ -5,9 +5,12 @@ import com.atmosware.musicplayer.dto.request.ArtistRequest;
 import com.atmosware.musicplayer.dto.response.ArtistResponse;
 import com.atmosware.musicplayer.exception.BusinessException;
 import com.atmosware.musicplayer.model.entity.Artist;
+import com.atmosware.musicplayer.model.entity.Role;
 import com.atmosware.musicplayer.model.entity.User;
+import com.atmosware.musicplayer.model.enums.RoleType;
 import com.atmosware.musicplayer.repository.ArtistRepository;
 import com.atmosware.musicplayer.service.ArtistService;
+import com.atmosware.musicplayer.service.RoleService;
 import com.atmosware.musicplayer.service.UserService;
 import com.atmosware.musicplayer.util.constant.Message;
 import com.atmosware.musicplayer.util.result.DataResult;
@@ -29,13 +32,15 @@ public class ArtistServiceImpl implements ArtistService {
     @Lazy
     private final UserService userService;
     private final ArtistConverter converter;
+    private final RoleService roleService;
     private final AuthenticationFacade authenticationFacade;
-
 
     @Override
     public Result create(ArtistRequest request) {
         User user = userService.findByEmail(authenticationFacade.getUsername());
         checkIfApprovalArtistTrue(user);
+        Role role = roleService.findByName(RoleType.ARTIST);
+        user.getRoles().add(role);
         Artist artist = converter.convertToEntity(request);
         artist.setId(0L);
         artist.setVerified(true);

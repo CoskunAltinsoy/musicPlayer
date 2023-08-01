@@ -1,8 +1,10 @@
 package com.atmosware.musicplayer.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -22,8 +24,8 @@ public class UserRequest {
     private String firstName;
     @NotBlank
     private String lastName;
-    @NotBlank
     private String nationalIdentity;
+
     private LocalDateTime dateOfBirth;
     private Set<Long> roleIds;
 }

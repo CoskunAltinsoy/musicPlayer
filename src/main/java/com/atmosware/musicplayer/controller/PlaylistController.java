@@ -1,9 +1,7 @@
 package com.atmosware.musicplayer.controller;
 
 import com.atmosware.musicplayer.dto.request.PlaylistRequest;
-import com.atmosware.musicplayer.dto.request.SongRequest;
 import com.atmosware.musicplayer.dto.response.PlaylistResponse;
-import com.atmosware.musicplayer.dto.response.SongResponse;
 import com.atmosware.musicplayer.service.PlaylistService;
 import com.atmosware.musicplayer.util.result.DataResult;
 import com.atmosware.musicplayer.util.result.Result;
@@ -15,7 +13,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/playlists")
-public class PlaylistsController {
+public class PlaylistController {
     private final PlaylistService service;
 
     @PostMapping

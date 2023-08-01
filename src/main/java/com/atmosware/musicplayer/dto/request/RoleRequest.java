@@ -1,5 +1,6 @@
 package com.atmosware.musicplayer.dto.request;
 
+import com.atmosware.musicplayer.model.enums.RoleType;
 import lombok.*;
 
 @Setter
@@ -8,5 +9,5 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class RoleRequest {
-    private String name;
+    private RoleType name;
 }

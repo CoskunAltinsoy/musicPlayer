@@ -6,9 +6,10 @@ import com.atmosware.musicplayer.util.result.Result;
 
 import java.util.List;
 
-public interface FavoritesService {
-    Result createSongToFavorite(Long songId, Long favoriteId);
+public interface FavoriteService {
+    Result createSongToFavorite(Long songId);
     Result deleteSongToFavorite(Long songId, Long favoriteId);
+    Result delete(Long favoriteId);
     DataResult<FavoriteResponse> getById(Long id);
     DataResult<List<FavoriteResponse>> getAll();
 }

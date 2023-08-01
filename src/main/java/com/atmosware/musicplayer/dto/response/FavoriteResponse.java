@@ -3,6 +3,7 @@ package com.atmosware.musicplayer.dto.response;
 import jakarta.validation.constraints.Min;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.Set;
 
 @Getter
@@ -10,6 +11,6 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class FavoriteResponse {
+public class FavoriteResponse implements Serializable {
     private Set<SongResponse> songs;
 }

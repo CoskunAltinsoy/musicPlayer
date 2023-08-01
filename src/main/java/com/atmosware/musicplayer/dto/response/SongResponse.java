@@ -2,6 +2,7 @@ package com.atmosware.musicplayer.dto.response;
 
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.Set;
 
 @Getter
@@ -9,7 +10,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SongResponse {
+public class SongResponse implements Serializable {
     private Long id;
     private AlbumResponse album;
     private Set<GenreResponse> genres;

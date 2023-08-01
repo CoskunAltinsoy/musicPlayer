@@ -6,9 +6,12 @@ import com.atmosware.musicplayer.model.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.format.DateTimeFormatter;
+
 @Component
 @RequiredArgsConstructor
 public class UserConverter {
+
     public User convertToEntity(UserRequest request){
         return User.builder()
                 .email(request.getEmail())

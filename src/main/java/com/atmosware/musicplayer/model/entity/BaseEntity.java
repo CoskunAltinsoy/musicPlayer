@@ -1,5 +1,6 @@
 package com.atmosware.musicplayer.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,6 +21,8 @@ public abstract class BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+
     private LocalDateTime createdDate;
+
     private LocalDateTime updatedDate;
 }

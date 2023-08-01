@@ -3,11 +3,12 @@ package com.atmosware.musicplayer.util.result;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
-public class Result {
+public class Result implements Serializable {
     private String message;
-    private boolean isSuccessful;
 
     public Result() {
 
@@ -15,7 +16,5 @@ public class Result {
     public Result(String message) {
         this.message = message;
     }
-    public Result(String message, boolean isSuccessful) {
-        this.message = message;
-    }
+
 }

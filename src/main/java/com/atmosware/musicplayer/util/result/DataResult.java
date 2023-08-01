@@ -15,8 +15,4 @@ public class DataResult<T> extends Result {
         super(message);
         this.data = data;
     }
-    public DataResult(String message, boolean isSuccessful, T data) {
-        super(message, isSuccessful);
-        this.data = data;
-    }
 }

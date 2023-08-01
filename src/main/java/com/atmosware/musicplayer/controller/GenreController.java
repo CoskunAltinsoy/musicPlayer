@@ -1,15 +1,11 @@
 package com.atmosware.musicplayer.controller;
 
-import com.atmosware.musicplayer.dto.request.ArtistRequest;
 import com.atmosware.musicplayer.dto.request.GenreRequest;
-import com.atmosware.musicplayer.dto.response.ArtistResponse;
 import com.atmosware.musicplayer.dto.response.GenreResponse;
-import com.atmosware.musicplayer.service.ArtistService;
 import com.atmosware.musicplayer.service.GenreService;
 import com.atmosware.musicplayer.util.result.DataResult;
 import com.atmosware.musicplayer.util.result.Result;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +14,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/genres")
-public class GenresController {
+public class GenreController {
     private final GenreService service;
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping

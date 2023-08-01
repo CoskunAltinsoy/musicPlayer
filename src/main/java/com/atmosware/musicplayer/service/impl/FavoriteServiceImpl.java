@@ -7,7 +7,7 @@ import com.atmosware.musicplayer.model.entity.Favorite;
 import com.atmosware.musicplayer.model.entity.Song;
 import com.atmosware.musicplayer.model.entity.User;
 import com.atmosware.musicplayer.repository.FavoriteRepository;
-import com.atmosware.musicplayer.service.FavoritesService;
+import com.atmosware.musicplayer.service.FavoriteService;
 import com.atmosware.musicplayer.service.SongService;
 import com.atmosware.musicplayer.service.UserService;
 import com.atmosware.musicplayer.util.constant.Message;
@@ -17,12 +17,13 @@ import com.atmosware.musicplayer.util.security.AuthenticationFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
-public class FavoritesServiceImpl implements FavoritesService {
+public class FavoriteServiceImpl implements FavoriteService {
     private final FavoriteRepository repository;
     private final UserService userService;
     private final SongService songService;
@@ -30,24 +31,32 @@ public class FavoritesServiceImpl implements FavoritesService {
     private final SongConverter songConverter;
 
     @Override
-    public Result createSongToFavorite(Long songId, Long favoriteId) {
+    public Result createSongToFavorite(Long songId) {
         String email = authenticationFacade.getUsername();
         User user = userService.findByEmail(email);
         Song song = songService.findById(songId);
+        Set<Song> songs = new HashSet<>();
+        songs.add(song);
         Favorite favorite = new Favorite();
         favorite.setUser(user);
+        favorite.setSongs(songs);
         favorite.getSongs().add(song);
+        repository.save(favorite);
         return new Result(Message.Favorite.successful);
     }
 
     @Override
     public Result deleteSongToFavorite(Long songId, Long favoriteId) {
-        String email = authenticationFacade.getUsername();
-        User user = userService.findByEmail(email);
         Song song = songService.findById(songId);
-        Favorite favorite = new Favorite();
-        favorite.setUser(user);
+        Favorite favorite = repository.findById(favoriteId).orElseThrow();
         favorite.getSongs().remove(song);
+        repository.save(favorite);
+        return new Result(Message.Favorite.successful);
+    }
+
+    @Override
+    public Result delete(Long favoriteId) {
+        repository.deleteById(favoriteId);
         return new Result(Message.Favorite.successful);
     }
 

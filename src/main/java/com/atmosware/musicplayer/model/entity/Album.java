@@ -1,5 +1,6 @@
 package com.atmosware.musicplayer.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -17,6 +18,7 @@ import java.util.Set;
 @Table(name = "albums")
 public class Album extends BaseEntity {
     private String name;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime releasedYear;
 
     @OneToMany(mappedBy = "album", fetch = FetchType.LAZY)

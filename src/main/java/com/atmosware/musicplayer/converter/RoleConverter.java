@@ -14,13 +14,13 @@ import java.util.stream.Collectors;
 public class RoleConverter {
     public Role convertToEntity(RoleRequest request){
         return Role.builder()
-                .name(RoleType.valueOf(request.getName()))
+                .name(request.getName())
                 .build();
     }
 
     public RoleResponse convertToResponse(Role role){
         return RoleResponse.builder()
-                .name(role.getName().toString())
+                .name(role.getName())
                 .build();
     }
     public Set<RoleResponse> convertToResponseList(Set<Role> roles){

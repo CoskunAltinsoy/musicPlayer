@@ -1,5 +1,6 @@
 package com.atmosware.musicplayer.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -18,5 +19,6 @@ public class AlbumRequest {
     @NotBlank
     @Length(min = 1, message = "length must be greater than 1")
     private String name;
+
     private LocalDateTime releasedYear;
 }

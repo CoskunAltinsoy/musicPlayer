@@ -14,7 +14,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/artist")
-public class ArtistsController {
+public class ArtistController {
     private final ArtistService service;
 
     @PreAuthorize("hasAuthority('ADMIN') or hasRole('ARTIST')")

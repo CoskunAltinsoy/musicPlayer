@@ -17,6 +17,7 @@ import com.atmosware.musicplayer.security.JwtUtils;
 import com.atmosware.musicplayer.service.ArtistService;
 import com.atmosware.musicplayer.service.RoleService;
 import com.atmosware.musicplayer.service.UserService;
+import com.atmosware.musicplayer.util.TimeFormatter;
 import com.atmosware.musicplayer.util.constant.Message;
 import com.atmosware.musicplayer.util.email.EmailService;
 import com.atmosware.musicplayer.util.result.DataResult;
@@ -33,6 +34,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -50,6 +52,7 @@ public class UserServiceImpl implements UserService {
     private final ArtistService artistService;
     private final RoleConverter roleConverter;
     private final EmailService emailService;
+    private final TimeFormatter timeFormatter;
 
     @Override
     public DataResult<AuthResponse> login(AuthRequest request) {
@@ -68,15 +71,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public DataResult register(UserRequest request) {
+    public Result register(UserRequest request) {
         User user = converter.convertToEntity(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         Set<Role> roles = setRoleIdsFromRequest(request);
+        //user.setDateOfBirth(timeFormatter.format(request.getDateOfBirth()));
+        user.setCreatedDate(LocalDateTime.now());
         user.setDemandArtist(false);
         user.setApproveArtist(false);
         user.setRoles(roles);
         var userSaved = repository.save(user);
-        return new DataResult(Message.User.successful, userSaved);
+        return new Result(Message.User.successful);
     }
 
     @Override
@@ -169,7 +174,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Result followUser(Long followerId, Long followedId) {
         checkIfUserExistsById(followedId);
-        User followerUser = repository.findById(followedId).orElseThrow();
+        User followerUser = repository.findById(followerId).orElseThrow();
         User followedUser = repository.findById(followedId).orElseThrow();
         followerUser.getFollowed().add(followedUser);
         repository.save(followerUser);
@@ -179,7 +184,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Result unfollowUser(Long followerId, Long followedId) {
         checkIfUserExistsById(followedId);
-        User followerUser = repository.findById(followedId).orElseThrow();
+        User followerUser = repository.findById(followerId).orElseThrow();
         User followedUser = repository.findById(followedId).orElseThrow();
         followerUser.getFollowed().remove(followedUser);
         repository.save(followerUser);

@@ -5,6 +5,7 @@ import com.atmosware.musicplayer.dto.request.RoleRequest;
 import com.atmosware.musicplayer.dto.response.RoleResponse;
 import com.atmosware.musicplayer.exception.BusinessException;
 import com.atmosware.musicplayer.model.entity.Role;
+import com.atmosware.musicplayer.model.enums.RoleType;
 import com.atmosware.musicplayer.repository.RoleRepository;
 import com.atmosware.musicplayer.service.RoleService;
 import com.atmosware.musicplayer.util.constant.Message;
@@ -47,11 +48,22 @@ public class RoleServiceImpl implements RoleService {
     }
     @Override
     public Role findById(Long id) {
-        checkIfRoleExistsById(id);
         return repository.findById(id).orElseThrow();
     }
+
+    @Override
+    public Role findByName(RoleType name) {
+        checkIfRoleExistsByName(name);
+        return repository.findByName(name);
+    }
+
     private void checkIfRoleExistsById(Long id) {
         if (!repository.existsById(id)) {
+            throw new BusinessException(Message.Role.notExist);
+        }
+    }
+    private void checkIfRoleExistsByName(RoleType name) {
+        if (!repository.existsByName(name)) {
             throw new BusinessException(Message.Role.notExist);
         }
     }

@@ -14,6 +14,8 @@ import com.atmosware.musicplayer.util.constant.Message;
 import com.atmosware.musicplayer.util.result.DataResult;
 import com.atmosware.musicplayer.util.result.Result;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -27,6 +29,7 @@ public class AlbumServiceImpl implements AlbumService {
     private final ArtistService artistService;
     private final AlbumConverter converter;
 
+    @CacheEvict(value = "albums", allEntries = true)
     @Override
     public Result create(AlbumRequest request) {
         checkIfAlbumExistsByNameAndArtistId(request.getName(), request.getArtistId());
@@ -39,6 +42,7 @@ public class AlbumServiceImpl implements AlbumService {
         return new Result(Message.Album.successful);
     }
 
+    @CacheEvict(value = "albums", allEntries = true)
     @Override
     public Result update(AlbumRequest request, Long id) {
         checkIfAlbumExistsById(id);
@@ -51,13 +55,14 @@ public class AlbumServiceImpl implements AlbumService {
         return new Result(Message.Album.successful);
     }
 
+    @CacheEvict(value = "albums", allEntries = true)
     @Override
     public Result delete(Long id) {
         checkIfAlbumExistsById(id);
         repository.deleteById(id);
         return new Result(Message.Album.successful);
     }
-
+    @Cacheable(value = "albums", key = "#id")
     @Override
     public DataResult<AlbumResponse> getById(Long id) {
         checkIfAlbumExistsById(id);
@@ -68,6 +73,7 @@ public class AlbumServiceImpl implements AlbumService {
         return new DataResult<AlbumResponse>(Message.Album.successful,albumResponse);
     }
 
+    @Cacheable(value = "albums")
     @Override
     public DataResult<List<AlbumResponse>> getAll() {
         List<Album> albums = repository.findAll();
@@ -82,7 +88,7 @@ public class AlbumServiceImpl implements AlbumService {
                 .toList();
         return new DataResult<List<AlbumResponse>>(Message.Album.successful,responses);
     }
-
+    @Cacheable(value = "albums", key = "#name")
     @Override
     public DataResult<AlbumResponse> getByName(String name) {
         checkIfAlbumExistsByName(name);
@@ -92,7 +98,7 @@ public class AlbumServiceImpl implements AlbumService {
         albumResponse.setArtistResponse(artistResponse.getData());
         return new DataResult<AlbumResponse>(Message.Album.successful,albumResponse);
     }
-
+    @Cacheable(value = "albums")
     @Override
     public DataResult<List<AlbumResponse>> getByReleasedYearGreaterThan(LocalDateTime year) {
         List<Album> albums = repository.findByReleasedYearGreaterThan(year);
