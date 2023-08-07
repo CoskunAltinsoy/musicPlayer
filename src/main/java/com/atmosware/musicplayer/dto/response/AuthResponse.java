@@ -12,6 +12,7 @@ import java.util.Set;
 @Builder
 public class AuthResponse implements Serializable {
     private String token;
+    private String refreshToken;
     private String email;
     private Set<String> roles;
 }

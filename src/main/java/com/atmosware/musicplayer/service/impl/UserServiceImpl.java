@@ -10,20 +10,22 @@ import com.atmosware.musicplayer.dto.response.UserResponse;
 import com.atmosware.musicplayer.exception.BusinessException;
 import com.atmosware.musicplayer.model.entity.Artist;
 import com.atmosware.musicplayer.model.entity.Role;
+import com.atmosware.musicplayer.model.entity.Token;
 import com.atmosware.musicplayer.model.entity.User;
 import com.atmosware.musicplayer.repository.UserRepository;
 import com.atmosware.musicplayer.security.CustomUserDetail;
 import com.atmosware.musicplayer.security.JwtUtils;
 import com.atmosware.musicplayer.service.ArtistService;
 import com.atmosware.musicplayer.service.RoleService;
+import com.atmosware.musicplayer.service.TokenService;
 import com.atmosware.musicplayer.service.UserService;
+import com.atmosware.musicplayer.util.RequestUtils;
 import com.atmosware.musicplayer.util.TimeFormatter;
 import com.atmosware.musicplayer.util.constant.Message;
 import com.atmosware.musicplayer.util.email.EmailService;
 import com.atmosware.musicplayer.util.result.DataResult;
 import com.atmosware.musicplayer.util.result.Result;
 import com.atmosware.musicplayer.util.security.token.PasswordTokenGenerator;
-import io.netty.handler.codec.MessageAggregationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -43,45 +45,17 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository repository;
-    private final AuthenticationManager authenticationManager;
-    private final PasswordEncoder passwordEncoder;
-    private final JwtUtils jwtUtils;
     private final UserConverter converter;
     private final PasswordTokenGenerator generator;
     private final RoleService roleService;
     private final ArtistService artistService;
     private final RoleConverter roleConverter;
     private final EmailService emailService;
-    private final TimeFormatter timeFormatter;
+
 
     @Override
-    public DataResult<AuthResponse> login(AuthRequest request) {
-        checkIfUserExistsByEmail(request.getEmail());
-        Authentication authentication =
-                authenticationManager.authenticate
-                        (new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
-        CustomUserDetail customUserDetail = (CustomUserDetail) authentication.getPrincipal();
-        Set<String> roles = customUserDetail.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toSet());
-        return new DataResult<AuthResponse>(Message.User.successful,
-                new AuthResponse(jwt, customUserDetail.getUsername(), roles));
-    }
-
-    @Override
-    public Result register(UserRequest request) {
-        User user = converter.convertToEntity(request);
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        Set<Role> roles = setRoleIdsFromRequest(request);
-        //user.setDateOfBirth(timeFormatter.format(request.getDateOfBirth()));
-        user.setCreatedDate(LocalDateTime.now());
-        user.setDemandArtist(false);
-        user.setApproveArtist(false);
-        user.setRoles(roles);
-        var userSaved = repository.save(user);
-        return new Result(Message.User.successful);
+    public User save(User user) {
+        return repository.save(user);
     }
 
     @Override
@@ -104,7 +78,6 @@ public class UserServiceImpl implements UserService {
         repository.save(user);
         return new Result(Message.User.successful);
     }
-
     @Override
     public DataResult<UserResponse> getById(Long id) {
         checkIfUserExistsById(id);
@@ -114,7 +87,6 @@ public class UserServiceImpl implements UserService {
         userResponse.setRoles(roleResponses);
         return new DataResult<UserResponse>(Message.User.successful, userResponse);
     }
-
     @Override
     public DataResult<List<UserResponse>> getAll() {
         List<User> users = repository.findAll();
@@ -129,14 +101,12 @@ public class UserServiceImpl implements UserService {
                 .toList();
         return new DataResult<List<UserResponse>>(Message.User.successful, responses);
     }
-
     @Override
     public Result delete(Long id) {
         checkIfUserExistsById(id);
         repository.deleteById(id);
         return new Result(Message.User.successful);
     }
-
     @Override
     public Result changePassword(PasswordRequest request) {
         checkIfUserExistsByEmail(request.getEmail());
@@ -148,7 +118,6 @@ public class UserServiceImpl implements UserService {
         repository.save(user);
         return new Result(Message.User.successful);
     }
-
     @Override
     public Result resetPassword(String token, TokenPasswordRequest request) {
         User user = repository.findByResetPasswordToken(token).orElseThrow();
@@ -158,19 +127,17 @@ public class UserServiceImpl implements UserService {
         repository.save(user);
         return new Result(Message.User.successful);
     }
-
     @Override
     public DataResult<TokenResetResponse> forgotPassword(ResetPasswordRequest request) {
         User user = repository.findByEmail(request.getEmail()).orElseThrow();
         user.setResetPasswordToken(generator.generateToken());
         repository.save(user);
         TokenResetResponse tokenResetResponse = new TokenResetResponse();
-        tokenResetResponse.setUrlWithToken("http://localhost:8080/api/users/resetPassword?token=" +
+        tokenResetResponse.setUrlWithToken(RequestUtils.getClientIPAddress() + "/api/users/resetPassword?token=" +
                 user.getResetPasswordToken());
         emailService.sendEmail(user.getEmail(), tokenResetResponse.getUrlWithToken());
-        return new DataResult<TokenResetResponse>(Message.User.successful,tokenResetResponse);
+        return new DataResult<TokenResetResponse>(Message.User.successful, tokenResetResponse);
     }
-
     @Override
     public Result followUser(Long followerId, Long followedId) {
         checkIfUserExistsById(followedId);
@@ -180,7 +147,6 @@ public class UserServiceImpl implements UserService {
         repository.save(followerUser);
         return new Result(Message.User.successful);
     }
-
     @Override
     public Result unfollowUser(Long followerId, Long followedId) {
         checkIfUserExistsById(followedId);
@@ -190,7 +156,6 @@ public class UserServiceImpl implements UserService {
         repository.save(followerUser);
         return new Result(Message.User.successful);
     }
-
     @Override
     public Result followArtist(Long followerId, Long followedArtistId) {
         User user = repository.findById(followerId).orElseThrow();
@@ -199,7 +164,6 @@ public class UserServiceImpl implements UserService {
         repository.save(user);
         return new Result(Message.User.successful);
     }
-
     @Override
     public Result unfollowArtist(Long followerId, Long followedArtistId) {
         User user = repository.findById(followerId).orElseThrow();
@@ -208,27 +172,16 @@ public class UserServiceImpl implements UserService {
         repository.save(user);
         return new Result(Message.User.successful);
     }
-
     @Override
     public User findById(Long id) {
         checkIfUserExistsById(id);
         return repository.findById(id).orElseThrow();
     }
-
     @Override
     public User findByEmail(String email) {
         checkIfUserExistsByEmail(email);
         return repository.findByEmail(email).orElseThrow();
     }
-
-    private Set<Role> setRoleIdsFromRequest(UserRequest request) {
-        return request.getRoleIds().stream()
-                .map(roleId -> {
-                    return roleService.findById(roleId);
-                })
-                .collect(Collectors.toSet());
-    }
-
     private Set<Role> setRoleIdsFromUser(User user) {
         return user.getRoles().stream()
                 .map(role -> {
@@ -236,7 +189,6 @@ public class UserServiceImpl implements UserService {
                 })
                 .collect(Collectors.toSet());
     }
-
     private void checkIfPasswordMatches(String email, String oldPassword, String newPassword) {
         var user = repository.findByEmail(email).orElseThrow();
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
@@ -244,31 +196,26 @@ public class UserServiceImpl implements UserService {
             throw new BusinessException(Message.User.incorrectPassword);
         }
     }
-
     private void checkUserDemandState(boolean demand) {
         if (demand == true) {
             throw new BusinessException(Message.User.demandCreated);
         }
     }
-
     private void checkUserApprovalAndDemandState(boolean approval) {
         if (approval == true) {
             throw new BusinessException(Message.User.approvalCreated);
         }
     }
-
     private void checkUserDemandStateForApproval(boolean demand) {
         if (demand == false) {
             throw new BusinessException(Message.User.mustCreateDemand);
         }
     }
-
     private void checkIfUserExistsById(Long id) {
         if (!repository.existsById(id)) {
             throw new BusinessException(Message.User.notExist);
         }
     }
-
     private void checkIfUserExistsByEmail(String email) {
         if (!repository.existsByEmail(email)) {
             throw new BusinessException(Message.User.notExist);

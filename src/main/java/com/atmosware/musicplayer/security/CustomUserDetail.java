@@ -11,12 +11,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class CustomUserDetail implements UserDetails {
+    private Long id;
     private String email;
     @JsonIgnore
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
-    public CustomUserDetail(String email, String password,
+    public CustomUserDetail(Long id, String email, String password,
                             Collection<? extends GrantedAuthority> authorities) {
+        this.id = id;
         this.email = email;
         this.password = password;
         this.authorities = authorities;
@@ -28,6 +30,7 @@ public class CustomUserDetail implements UserDetails {
                         .collect(Collectors.toList());
 
         return new CustomUserDetail(
+                user.getId(),
                 user.getEmail(),
                 user.getPassword(),
                 authorities);
@@ -37,6 +40,9 @@ public class CustomUserDetail implements UserDetails {
         return authorities;
     }
 
+    public Long getId() {
+        return id;
+    }
     @Override
     public String getPassword() {
         return password;

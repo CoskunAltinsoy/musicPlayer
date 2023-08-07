@@ -72,7 +72,7 @@ public class ArtistServiceImpl implements ArtistService {
         checkIfArtistExistsById(id);
         Artist artist = repository.findById(id).orElseThrow();
         var artistResponse = converter.convertToResponse(artist);
-        return new DataResult<ArtistResponse>(Message.Artist.successful,artistResponse);
+        return new DataResult<>(Message.Artist.successful,artistResponse);
     }
 
     @Override
@@ -81,8 +81,8 @@ public class ArtistServiceImpl implements ArtistService {
         var responses = artists
                 .stream()
                 .map(converter::convertToResponse)
-                .collect(Collectors.toList());
-        return new DataResult<List<ArtistResponse>>(Message.Artist.successful,responses);
+                .toList();
+        return new DataResult<>(Message.Artist.successful,responses);
     }
 
     @Override

@@ -19,15 +19,7 @@ import java.util.List;
 public class UserController {
     private final UserService service;
 
-    @PostMapping("/login/{login}")
-    public DataResult<AuthResponse> login(@RequestBody AuthRequest request) {
-        return service.login(request);
-    }
 
-    @PostMapping("/register/{register}")
-    public Result register(@RequestBody UserRequest request) {
-        return service.register(request);
-    }
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/create-demand-artist/{id}")
     public Result createDemandArtist(@PathVariable Long id) {
@@ -57,7 +49,7 @@ public class UserController {
     public Result delete(@PathVariable Long id) {
         return service.delete(id);
     }
-    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+   // @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     @PostMapping("/change-password")
     public Result changePassword(@RequestBody PasswordRequest request) {
         return service.changePassword(request);

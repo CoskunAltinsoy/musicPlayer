@@ -11,8 +11,7 @@ import com.atmosware.musicplayer.util.result.Result;
 import java.util.List;
 
 public interface UserService {
-    DataResult<AuthResponse> login(AuthRequest request);
-    Result register(UserRequest request);
+    User save(User user);
     Result createDemandArtist(Long id);
     Result createApprovalArtist(Long id);
     DataResult<UserResponse> getById(Long id);
