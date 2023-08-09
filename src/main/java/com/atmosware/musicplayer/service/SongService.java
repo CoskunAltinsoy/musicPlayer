@@ -6,6 +6,7 @@ import com.atmosware.musicplayer.model.entity.Song;
 import com.atmosware.musicplayer.util.result.DataResult;
 import com.atmosware.musicplayer.util.result.Result;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface SongService {

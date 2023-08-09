@@ -19,6 +19,6 @@ import java.util.Set;
 public class Genre extends BaseEntity {
     private String name;
 
-    @ManyToMany(mappedBy = "genres", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "genres", cascade = CascadeType.ALL)
     private Set<Song> songs;
 }

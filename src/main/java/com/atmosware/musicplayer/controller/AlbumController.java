@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/albums")
+@RequestMapping("/api/album")
 public class AlbumController {
     private final AlbumService service;
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('ARTIST')")

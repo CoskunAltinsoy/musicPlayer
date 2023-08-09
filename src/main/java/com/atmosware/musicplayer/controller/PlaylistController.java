@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/playlists")
+@RequestMapping("/api/playlist")
 public class PlaylistController {
     private final PlaylistService service;
 

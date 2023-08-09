@@ -21,10 +21,13 @@ public class Album extends BaseEntity {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime releasedYear;
 
-    @OneToMany(mappedBy = "album", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "album")
     private List<Song> songs;
 
     @ManyToOne
     @JoinColumn(name = "artist_id")
     private Artist artist;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Image image;
 }

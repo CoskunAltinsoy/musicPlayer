@@ -1,16 +1,15 @@
 package com.atmosware.musicplayer.controller;
 
 import com.atmosware.musicplayer.dto.request.AuthRequest;
+import com.atmosware.musicplayer.dto.request.RefreshTokenRequest;
 import com.atmosware.musicplayer.dto.request.UserRequest;
 import com.atmosware.musicplayer.dto.response.AuthResponse;
+import com.atmosware.musicplayer.dto.response.RefreshTokenResponse;
 import com.atmosware.musicplayer.service.AuthService;
 import com.atmosware.musicplayer.util.result.DataResult;
 import com.atmosware.musicplayer.util.result.Result;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,5 +25,14 @@ public class AuthController {
     @PostMapping("/register/{register}")
     public Result register(@RequestBody UserRequest request) {
         return service.register(request);
+    }
+
+    @PostMapping("/refresh-token/{refresh-token}")
+    public DataResult<RefreshTokenResponse> refreshToken(@RequestBody RefreshTokenRequest request) {
+        return service.refreshToken(request);
+    }
+    @PostMapping("/logout/{logout}")
+    public Result logout() {
+        return service.logout();
     }
 }

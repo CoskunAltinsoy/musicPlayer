@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,7 +22,7 @@ public class GlobalRestExceptionHandler {
     public ExceptionResult<Object> handleBusinessException(BusinessException exception) {
         return new ExceptionResult<Object>(
                 exception.getMessage(),
-                ExceptionTypes.Exception.Business,
+                ExceptionTypes.Exception.BUSINESS,
                 HttpStatus.UNPROCESSABLE_ENTITY.value()
         );
     }
@@ -33,13 +34,11 @@ public class GlobalRestExceptionHandler {
         for (FieldError fieldError : exception.getBindingResult().getFieldErrors()) {
             validationErrors.put(fieldError.getField(), fieldError.getDefaultMessage());
         }
-        ExceptionResult<Object> exceptionResult = new ExceptionResult<Object>(
+        return new ExceptionResult<Object>(
                 validationErrors,
-                ExceptionTypes.Exception.Validation,
+                ExceptionTypes.Exception.VALIDATION,
                 HttpStatus.BAD_REQUEST.value()
         );
-
-        return exceptionResult;
     }
 
     @ExceptionHandler
@@ -47,7 +46,7 @@ public class GlobalRestExceptionHandler {
     public ExceptionResult<Object> handleValidationException(ValidationException exception) {
         return new ExceptionResult<>(
                 exception.getMessage(),
-                ExceptionTypes.Exception.Validation,
+                ExceptionTypes.Exception.VALIDATION,
                 HttpStatus.UNPROCESSABLE_ENTITY.value()
         );
     }
@@ -57,7 +56,7 @@ public class GlobalRestExceptionHandler {
     private ExceptionResult<Object> handleDataIntegrityViolationExceptionException(DataIntegrityViolationException exception) {
         return new ExceptionResult<Object>(
                 exception.getMessage(),
-                ExceptionTypes.Exception.DataIntegrityViolation,
+                ExceptionTypes.Exception.DATA_INTEGRITY_VIOLATION,
                 HttpStatus.CONFLICT.value()
         );
     }

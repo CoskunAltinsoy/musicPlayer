@@ -11,7 +11,6 @@ import com.atmosware.musicplayer.util.result.Result;
 import java.util.List;
 
 public interface UserService {
-    User save(User user);
     Result createDemandArtist(Long id);
     Result createApprovalArtist(Long id);
     DataResult<UserResponse> getById(Long id);
@@ -26,4 +25,5 @@ public interface UserService {
     Result unfollowArtist(Long followerId, Long followedArtistId);
     User findById(Long id);
     User findByEmail(String email);
+    User save(User user);
 }

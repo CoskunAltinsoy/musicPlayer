@@ -17,7 +17,6 @@ import java.util.Set;
 @SuperBuilder
 @Table(name = "favorites")
 public class Favorite extends BaseEntity {
-
     @ManyToMany
     @JoinTable(
             name = "favorite_song",

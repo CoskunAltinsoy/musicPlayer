@@ -17,17 +17,12 @@ import com.atmosware.musicplayer.util.constant.Message;
 import com.atmosware.musicplayer.util.result.DataResult;
 import com.atmosware.musicplayer.util.result.Result;
 import com.atmosware.musicplayer.util.security.AuthenticationFacade;
-import com.atmosware.musicplayer.util.security.AuthenticationFacadeImpl;
-import io.netty.handler.codec.MessageAggregator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -47,7 +42,7 @@ public class PlaylistServiceImpl implements PlaylistService {
         playlist.setCreatedDate(LocalDateTime.now());
         playlist.setUser(user);
         repository.save(playlist);
-        return new Result(Message.Playlist.successful);
+        return new Result(Message.Playlist.SUCCESSFUL);
     }
 
     @Override
@@ -57,7 +52,7 @@ public class PlaylistServiceImpl implements PlaylistService {
         Playlist playlist = repository.findById(playlistId).orElseThrow();
         playlist.getSongs().add(song);
         repository.save(playlist);
-        return new Result(Message.Playlist.successful);
+        return new Result(Message.Playlist.SUCCESSFUL);
     }
 
     @Override
@@ -66,14 +61,14 @@ public class PlaylistServiceImpl implements PlaylistService {
         playlist.setUpdatedDate(LocalDateTime.now());
         playlist.setName(request.getName());
         repository.save(playlist);
-        return new Result(Message.Playlist.successful);
+        return new Result(Message.Playlist.SUCCESSFUL);
     }
 
     @Override
     public Result delete(Long id) {
         checkIfPlaylistExistsById(id);
         repository.deleteById(id);
-        return new Result(Message.Playlist.successful);
+        return new Result(Message.Playlist.SUCCESSFUL);
     }
 
     @Override
@@ -83,7 +78,7 @@ public class PlaylistServiceImpl implements PlaylistService {
         Playlist playlist = repository.findById(playlistId).orElseThrow();
         playlist.getSongs().remove(song);
         repository.save(playlist);
-        return new Result(Message.Playlist.successful);
+        return new Result(Message.Playlist.SUCCESSFUL);
     }
 
     @Override
@@ -92,7 +87,7 @@ public class PlaylistServiceImpl implements PlaylistService {
         Set<SongResponse> songResponses = songConverter.convertToResponseList(playlist.getSongs());
         PlaylistResponse playlistResponse = converter.convertToResponse(playlist);
         playlistResponse.setSongs(songResponses);
-        return new DataResult<PlaylistResponse>(Message.Playlist.successful,playlistResponse);
+        return new DataResult<PlaylistResponse>(Message.Playlist.SUCCESSFUL,playlistResponse);
     }
 
     @Override
@@ -106,11 +101,11 @@ public class PlaylistServiceImpl implements PlaylistService {
                     return playlistResponse;
                 })
                 .toList();
-        return new DataResult<List<PlaylistResponse>>(Message.Playlist.successful,responses);
+        return new DataResult<List<PlaylistResponse>>(Message.Playlist.SUCCESSFUL,responses);
     }
     private void checkIfPlaylistExistsById(Long id) {
         if (!repository.existsById(id)) {
-            throw new BusinessException(Message.Playlist.notExist);
+            throw new BusinessException(Message.Playlist.NOT_EXIST);
         }
     }
 }

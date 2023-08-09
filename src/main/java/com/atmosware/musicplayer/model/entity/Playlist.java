@@ -23,7 +23,7 @@ public class Playlist extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "playlist_song",
             joinColumns = @JoinColumn(name = "playslist_id"),

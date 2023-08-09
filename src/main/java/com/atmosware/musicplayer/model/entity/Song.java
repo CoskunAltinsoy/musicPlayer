@@ -18,15 +18,15 @@ import java.util.Set;
 @SuperBuilder
 @Table(name = "songs")
 public class Song extends BaseEntity {
-
     private String name;
+    private Short duration;
     private String lyrics;
 
     @ManyToOne()
     @JoinColumn(name = "album_id")
     private Album album;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "song_genre",
             joinColumns = @JoinColumn(name = "song_id"),
@@ -34,9 +34,12 @@ public class Song extends BaseEntity {
     )
     private Set<Genre> genres;
 
-    @ManyToMany(mappedBy = "songs", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "songs", cascade = CascadeType.ALL)
     private Set<Playlist> playlists;
 
     @ManyToMany(mappedBy = "songs")
     private Set<Favorite> favorites;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Image image;
 }

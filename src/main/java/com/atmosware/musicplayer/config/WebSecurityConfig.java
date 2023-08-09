@@ -61,27 +61,9 @@ public class WebSecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/users/register/**","/api/users/login/**").permitAll()
-                        .requestMatchers("/api/users/create-demand-artist/**").hasAuthority("USER")
-                        .requestMatchers("/api/users/create-approval-artist/**").hasAuthority("ADMIN")
-                        .requestMatchers("/api/users/id/**").hasAuthority("ADMIN")
-                        .requestMatchers("/api/users/getall").hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE,"/api/users/**").hasAuthority("ADMIN")
-                        .requestMatchers("/api/users/change-password/**").hasAnyAuthority("USER", "ADMIN")
-                        .requestMatchers("/api/users/forgot-password/**").hasAnyAuthority("USER", "ADMIN")
-                        .requestMatchers("/api/users/reset-password/**").hasAnyAuthority("USER", "ADMIN")
-                        .requestMatchers("/api/users/follow-user/**").hasAuthority("USER")
-                        .requestMatchers("/api/users/unfollow-user/**").hasAuthority("USER")
-                        .requestMatchers("/api/users/follow-artist/**").hasAuthority("USER")
-                        .requestMatchers("/api/users/unfollow-artist/**").hasAuthority("USER")
-
-                        .requestMatchers("/api/albums").hasAnyAuthority("ADMIN","ARTIST")
-                        .requestMatchers("/api/artists").hasAnyAuthority("ADMIN","ARTIST")
-                        .requestMatchers("/api/genres").hasAuthority("ADMIN")
-                        .requestMatchers("/api/songs").hasAnyAuthority("ADMIN","ARTIST")
+                        .requestMatchers("/api/auth/register/**","/api/auth/login/**").permitAll()
                         .requestMatchers("/api/test/**").permitAll()
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
-                        .requestMatchers("/api/roles/**","/api/roles").permitAll()
                         .anyRequest().authenticated());
 
         http.authenticationProvider(authenticationProvider());

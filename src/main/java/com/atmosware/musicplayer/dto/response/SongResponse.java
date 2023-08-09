@@ -15,4 +15,5 @@ public class SongResponse implements Serializable {
     private AlbumResponse album;
     private Set<GenreResponse> genres;
     private String name;
+    private byte[] image;
 }

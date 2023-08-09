@@ -6,14 +6,15 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface AlbumRepository extends JpaRepository<Album, Long> {
-    Album findByNameIgnoreCase(String name);
+    Optional<Album> findByNameIgnoreCase(String name);
 
     List<Album> findByReleasedYearGreaterThan(LocalDateTime year);
 
-    boolean existsByNameAndArtist_Id(String name, Long artistId);
+    Optional<Boolean> existsByNameAndArtist_Id(String name, Long artistId);
 
     boolean existsByNameIgnoreCase(String name);
 

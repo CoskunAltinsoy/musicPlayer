@@ -42,7 +42,7 @@ public class FavoriteServiceImpl implements FavoriteService {
         favorite.setSongs(songs);
         favorite.getSongs().add(song);
         repository.save(favorite);
-        return new Result(Message.Favorite.successful);
+        return new Result(Message.Favorite.SUCCESSFUL);
     }
 
     @Override
@@ -51,13 +51,13 @@ public class FavoriteServiceImpl implements FavoriteService {
         Favorite favorite = repository.findById(favoriteId).orElseThrow();
         favorite.getSongs().remove(song);
         repository.save(favorite);
-        return new Result(Message.Favorite.successful);
+        return new Result(Message.Favorite.SUCCESSFUL);
     }
 
     @Override
     public Result delete(Long favoriteId) {
         repository.deleteById(favoriteId);
-        return new Result(Message.Favorite.successful);
+        return new Result(Message.Favorite.SUCCESSFUL);
     }
 
     @Override
@@ -80,6 +80,6 @@ public class FavoriteServiceImpl implements FavoriteService {
                     return favoriteResponse;
                 })
                 .toList();
-        return new DataResult<List<FavoriteResponse>>(Message.Favorite.successful,responses);
+        return new DataResult<List<FavoriteResponse>>(Message.Favorite.SUCCESSFUL,responses);
     }
 }

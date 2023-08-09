@@ -11,13 +11,11 @@ import com.atmosware.musicplayer.service.RoleService;
 import com.atmosware.musicplayer.util.constant.Message;
 import com.atmosware.musicplayer.util.result.DataResult;
 import com.atmosware.musicplayer.util.result.Result;
-import io.netty.handler.codec.MessageAggregationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -30,13 +28,13 @@ public class RoleServiceImpl implements RoleService {
         role.setId(0L);
         role.setCreatedDate(LocalDateTime.now());
         repository.save(role);
-        return new Result(Message.Role.successful);
+        return new Result(Message.Role.SUCCESSFUL);
     }
     @Override
     public Result delete(Long id) {
         checkIfRoleExistsById(id);
         repository.deleteById(id);
-        return new Result(Message.Role.successful);
+        return new Result(Message.Role.SUCCESSFUL);
     }
     @Override
     public DataResult<List<RoleResponse>> getAll() {
@@ -44,27 +42,23 @@ public class RoleServiceImpl implements RoleService {
         var responses = roles.stream()
                 .map(role -> converter.convertToResponse(role))
                 .toList();
-        return new DataResult<List<RoleResponse>>(Message.Role.successful,responses);
+        return new DataResult<List<RoleResponse>>(Message.Role.SUCCESSFUL,responses);
     }
     @Override
     public Role findById(Long id) {
-        return repository.findById(id).orElseThrow();
+        return repository.findById(id)
+                .orElseThrow(() -> new BusinessException(Message.Role.NOT_EXIST));
     }
 
     @Override
     public Role findByName(RoleType name) {
-        checkIfRoleExistsByName(name);
-        return repository.findByName(name);
+        return repository.findByName(name)
+                .orElseThrow(() -> new BusinessException(Message.Role.NOT_EXIST));
     }
 
     private void checkIfRoleExistsById(Long id) {
         if (!repository.existsById(id)) {
-            throw new BusinessException(Message.Role.notExist);
-        }
-    }
-    private void checkIfRoleExistsByName(RoleType name) {
-        if (!repository.existsByName(name)) {
-            throw new BusinessException(Message.Role.notExist);
+            throw new BusinessException(Message.Role.NOT_EXIST);
         }
     }
 }

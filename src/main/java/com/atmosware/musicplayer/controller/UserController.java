@@ -15,10 +15,9 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/users")
+@RequestMapping("/api/user")
 public class UserController {
     private final UserService service;
-
 
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/create-demand-artist/{id}")
@@ -39,7 +38,7 @@ public class UserController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("/getall")
+    @GetMapping("/get-all")
     public DataResult<List<UserResponse>> getAll() {
         return service.getAll();
     }
@@ -49,7 +48,7 @@ public class UserController {
     public Result delete(@PathVariable Long id) {
         return service.delete(id);
     }
-   // @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     @PostMapping("/change-password")
     public Result changePassword(@RequestBody PasswordRequest request) {
         return service.changePassword(request);

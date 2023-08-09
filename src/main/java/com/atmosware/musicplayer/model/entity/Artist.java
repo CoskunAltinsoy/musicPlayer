@@ -21,13 +21,15 @@ import java.util.Set;
 public class Artist extends BaseEntity {
     private String name;
     private String description;
-    private boolean isVerified;
     private int numberOfSongs;
     private int numberOfAlbum;
 
-    @OneToMany(mappedBy = "artist", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "artist")
     private List<Album> albums;
 
     @ManyToMany(mappedBy = "followedArtists")
     private Set<User> followers = new HashSet<>();
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Image image;
 }

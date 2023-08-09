@@ -20,7 +20,7 @@ public class JwtUtils {
     private int jwtExpirationMs;
 
     public String generateJwtToken(Authentication authentication){
-        return getUserNameFromJwtToken(authentication.getName());
+        return generateTokenFromUsername(authentication.getName());
     }
     public String generateTokenFromUsername(String username) {
         return Jwts.builder()

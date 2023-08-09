@@ -9,7 +9,6 @@ import java.util.Optional;
 
 public enum RequestUtils {
     ;
-
     private static final String FORWARDED_FOR = "X-Forwarded-For";
     private static Optional<HttpServletRequest> getHttpServletRequest() {
         return Optional.ofNullable(RequestContextHolder.getRequestAttributes())

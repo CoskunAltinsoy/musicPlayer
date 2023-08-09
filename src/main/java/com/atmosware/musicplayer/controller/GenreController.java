@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/genres")
+@RequestMapping("/api/genre")
 public class GenreController {
     private final GenreService service;
     @PreAuthorize("hasRole('ADMIN')")

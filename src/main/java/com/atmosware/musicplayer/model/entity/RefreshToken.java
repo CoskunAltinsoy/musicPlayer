@@ -15,8 +15,8 @@ import java.time.Instant;
 @AllArgsConstructor
 @Entity
 @SuperBuilder
-@Table(name = "tokens")
-public class Token {
+@Table(name = "refresh_tokens")
+public class RefreshToken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
