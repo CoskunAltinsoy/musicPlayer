@@ -10,6 +10,7 @@ import com.atmosware.musicplayer.repository.FavoriteRepository;
 import com.atmosware.musicplayer.service.FavoriteService;
 import com.atmosware.musicplayer.service.SongService;
 import com.atmosware.musicplayer.service.UserService;
+import com.atmosware.musicplayer.util.TimeUtil;
 import com.atmosware.musicplayer.util.constant.Message;
 import com.atmosware.musicplayer.util.result.DataResult;
 import com.atmosware.musicplayer.util.result.Result;
@@ -29,6 +30,7 @@ public class FavoriteServiceImpl implements FavoriteService {
     private final SongService songService;
     private final AuthenticationFacade authenticationFacade;
     private final SongConverter songConverter;
+    private final TimeUtil timeUtil;
 
     @Override
     public Result createSongToFavorite(Long songId) {
@@ -41,6 +43,7 @@ public class FavoriteServiceImpl implements FavoriteService {
         favorite.setUser(user);
         favorite.setSongs(songs);
         favorite.getSongs().add(song);
+        favorite.setCreatedDate(timeUtil.getLocalDateTimeNow());
         repository.save(favorite);
         return new Result(Message.Favorite.SUCCESSFUL);
     }

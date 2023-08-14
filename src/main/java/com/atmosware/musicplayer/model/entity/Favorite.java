@@ -25,7 +25,7 @@ public class Favorite extends BaseEntity {
     )
     private Set<Song> songs;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
 }

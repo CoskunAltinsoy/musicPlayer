@@ -7,10 +7,12 @@ import com.atmosware.musicplayer.dto.response.AuthResponse;
 import com.atmosware.musicplayer.dto.response.RefreshTokenResponse;
 import com.atmosware.musicplayer.util.result.DataResult;
 import com.atmosware.musicplayer.util.result.Result;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 public interface AuthService {
     DataResult<AuthResponse> login(AuthRequest request);
     Result register(UserRequest request);
     DataResult<RefreshTokenResponse> refreshToken(RefreshTokenRequest request);
-    Result logout();
+    Result logout(HttpServletRequest request, HttpServletResponse response);
 }

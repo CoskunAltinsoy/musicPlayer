@@ -7,6 +7,7 @@ import com.atmosware.musicplayer.exception.BusinessException;
 import com.atmosware.musicplayer.model.entity.Genre;
 import com.atmosware.musicplayer.repository.GenreRepository;
 import com.atmosware.musicplayer.service.GenreService;
+import com.atmosware.musicplayer.util.TimeUtil;
 import com.atmosware.musicplayer.util.constant.Message;
 import com.atmosware.musicplayer.util.result.DataResult;
 import com.atmosware.musicplayer.util.result.Result;
@@ -22,12 +23,12 @@ import java.util.stream.Collectors;
 public class GenreServiceImpl implements GenreService {
     private final GenreRepository repository;
     private final GenreConverter converter;
+    private final TimeUtil timeUtil;
     @Override
     public Result create(GenreRequest request) {
         checkIfGenreExistsByName(request.getName());
         Genre genre = converter.convertToEntity(request);
-        genre.setId(0L);
-        genre.setCreatedDate(LocalDateTime.now());
+        genre.setCreatedDate(timeUtil.getLocalDateTimeNow());
         repository.save(genre);
         return new Result(Message.Genre.SUCCESSFUL);
     }
@@ -36,7 +37,7 @@ public class GenreServiceImpl implements GenreService {
     public Result update(GenreRequest request, Long id) {
         checkIfGenreExistsByName(request.getName());
         Genre genre = repository.findById(id).orElseThrow();
-        genre.setUpdatedDate(LocalDateTime.now());
+        genre.setUpdatedDate(timeUtil.getLocalDateTimeNow());
         repository.save(genre);
         return new Result(Message.Genre.SUCCESSFUL);
     }

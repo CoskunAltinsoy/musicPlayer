@@ -12,8 +12,6 @@ import java.util.Optional;
 public interface AlbumRepository extends JpaRepository<Album, Long> {
     Optional<Album> findByNameIgnoreCase(String name);
 
-    List<Album> findByReleasedYearGreaterThan(LocalDateTime year);
-
     Optional<Boolean> existsByNameAndArtist_Id(String name, Long artistId);
 
     boolean existsByNameIgnoreCase(String name);

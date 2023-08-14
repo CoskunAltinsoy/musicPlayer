@@ -6,6 +6,7 @@ import com.atmosware.musicplayer.model.entity.Album;
 import com.atmosware.musicplayer.util.result.DataResult;
 import com.atmosware.musicplayer.util.result.Result;
 import org.hibernate.boot.model.relational.Database;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,8 +23,6 @@ public interface AlbumService {
     DataResult<List<AlbumResponse>> getAll();
 
     DataResult<AlbumResponse> getByName(String name);
-
-    DataResult<List<AlbumResponse>> getByReleasedYearGreaterThan(LocalDateTime year);
 
     Album findById(Long id);
 }

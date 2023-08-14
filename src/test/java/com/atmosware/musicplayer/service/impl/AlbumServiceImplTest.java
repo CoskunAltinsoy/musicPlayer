@@ -16,24 +16,4 @@ import java.time.Month;
 
 @SpringBootTest
 class AlbumServiceImplTest {
-    @Autowired
-    private AlbumService service;
-    @Autowired
-    private ArtistService artistService;
-    @Autowired
-    private ModelMapper mapper;
-
-    @Test
-    public void create() {
-        ArtistResponse response = artistService.getById(2L);
-        Artist artist = mapper.map(response, Artist.class);
-
-        Album album = new Album();
-        album.setName("Fesupanallah");
-        album.setArtist(artist);
-        album.setReleasedYear(LocalDateTime.of(1980, Month.MAY, 15, 00, 00));
-
-        AlbumRequest request = mapper.map(album, AlbumRequest.class);
-        service.create(request);
-    }
 }

@@ -48,8 +48,8 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         //todo: fix here
     }
     @Override
-    public int deleteByUserId(Long userId) {
-        return repository.deleteByUser(userService.findById(userId));
+    public void deleteByUserId(Long userId) {
+        repository.deleteByUserId(userId);
     }
     @Override
     public Optional<RefreshToken> findByToken(String token) {

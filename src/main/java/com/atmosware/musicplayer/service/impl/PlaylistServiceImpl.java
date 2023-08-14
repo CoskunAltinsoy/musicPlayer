@@ -13,6 +13,7 @@ import com.atmosware.musicplayer.repository.PlaylistRepository;
 import com.atmosware.musicplayer.service.PlaylistService;
 import com.atmosware.musicplayer.service.SongService;
 import com.atmosware.musicplayer.service.UserService;
+import com.atmosware.musicplayer.util.TimeUtil;
 import com.atmosware.musicplayer.util.constant.Message;
 import com.atmosware.musicplayer.util.result.DataResult;
 import com.atmosware.musicplayer.util.result.Result;
@@ -33,13 +34,13 @@ public class PlaylistServiceImpl implements PlaylistService {
     private final UserService userService;
     private final SongConverter songConverter;
     private final AuthenticationFacade authenticationFacade;
+    private final TimeUtil timeUtil;
     @Override
     public Result create(PlaylistRequest request) {
         String email = authenticationFacade.getUsername();
         User user = userService.findByEmail(email);
         Playlist playlist = converter.convertToEntity(request);
-        playlist.setId(0L);
-        playlist.setCreatedDate(LocalDateTime.now());
+        playlist.setCreatedDate(timeUtil.getLocalDateTimeNow());
         playlist.setUser(user);
         repository.save(playlist);
         return new Result(Message.Playlist.SUCCESSFUL);
@@ -60,6 +61,7 @@ public class PlaylistServiceImpl implements PlaylistService {
         Playlist playlist = repository.findById(id).orElseThrow();
         playlist.setUpdatedDate(LocalDateTime.now());
         playlist.setName(request.getName());
+        playlist.setUpdatedDate(timeUtil.getLocalDateTimeNow());
         repository.save(playlist);
         return new Result(Message.Playlist.SUCCESSFUL);
     }

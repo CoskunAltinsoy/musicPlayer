@@ -5,6 +5,7 @@ import com.atmosware.musicplayer.dto.response.ArtistResponse;
 import com.atmosware.musicplayer.model.entity.Artist;
 import com.atmosware.musicplayer.util.result.DataResult;
 import com.atmosware.musicplayer.util.result.Result;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -18,6 +19,8 @@ public interface ArtistService {
     DataResult<ArtistResponse> getById(Long id);
 
     DataResult<List<ArtistResponse>> getAll();
+    Result followArtist(Long followerId, Long followedArtistId);
+    Result unfollowArtist(Long followerId, Long followedArtistId);
 
     DataResult<ArtistResponse> getByName(String name);
 

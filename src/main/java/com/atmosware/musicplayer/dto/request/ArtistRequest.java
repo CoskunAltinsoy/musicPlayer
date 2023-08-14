@@ -16,5 +16,4 @@ public class ArtistRequest {
     @NotBlank
     @Length(min = 2, max = 100, message = "length must be between 2 and 100")
     private String description;
-    private MultipartFile file;
 }

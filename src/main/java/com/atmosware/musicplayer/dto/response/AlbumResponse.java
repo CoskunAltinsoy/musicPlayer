@@ -15,5 +15,4 @@ public class AlbumResponse implements Serializable{
     private ArtistResponse artistResponse;
     private String name;
     private LocalDateTime releasedYear;
-    private byte[] image;
 }

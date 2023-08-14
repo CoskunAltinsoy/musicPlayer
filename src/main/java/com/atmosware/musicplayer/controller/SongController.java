@@ -8,8 +8,10 @@ import com.atmosware.musicplayer.util.result.Result;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,19 +33,35 @@ public class SongController {
     public Result delete(@PathVariable Long id) {
         return service.delete(id);
     }
-
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('ARTIST') or hasAuthority('USER')")
     @GetMapping("/id/{id}")
     public DataResult<SongResponse> getById(@PathVariable Long id) {
         return service.getById(id);
     }
-
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('ARTIST') or hasAuthority('USER')")
     @GetMapping()
     public DataResult<List<SongResponse>> getAll() {
         return service.getAll();
     }
-
-    @GetMapping("/albumId/{albumId}")
-    public DataResult<List<SongResponse>> getAllByAlbum(@PathVariable Long albumId) {
-        return service.getAllByAlbum(albumId);
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('ARTIST') or hasAuthority('USER')")
+    @GetMapping("/artistName/{name}")
+    public DataResult<List<SongResponse>>  getAllByArtistName(@RequestParam String name) {
+        return service.getAllByArtistName(name);
+    }
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('ARTIST') or hasAuthority('USER')")
+    @GetMapping("/albumName/{name}")
+    public DataResult<List<SongResponse>> getAllByAlbumName(@RequestParam String name) {
+        return service.getAllByAlbumName(name);
+    }
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('ARTIST') or hasAuthority('USER')")
+    @GetMapping("/genreName/{name}")
+    public DataResult<List<SongResponse>> getAllByGenreName(@RequestParam String name) {
+        return service.getAllByGenreName(name);
+    }
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('ARTIST') or hasAuthority('USER')")
+    @GetMapping("/most-popular/{}")
+    public DataResult<List<SongResponse>> getMostFavoriteSongs(@RequestParam(defaultValue = "1") int page,
+                                                               @RequestParam(defaultValue = "10") int size) {
+        return service.getMostFavoriteSongs(page, size);
     }
 }

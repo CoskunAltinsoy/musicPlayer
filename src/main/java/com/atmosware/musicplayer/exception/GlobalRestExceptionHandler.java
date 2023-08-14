@@ -26,7 +26,6 @@ public class GlobalRestExceptionHandler {
                 HttpStatus.UNPROCESSABLE_ENTITY.value()
         );
     }
-
     @ExceptionHandler
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     private ExceptionResult<Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
@@ -40,7 +39,6 @@ public class GlobalRestExceptionHandler {
                 HttpStatus.BAD_REQUEST.value()
         );
     }
-
     @ExceptionHandler
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY) // 422
     public ExceptionResult<Object> handleValidationException(ValidationException exception) {
@@ -50,7 +48,6 @@ public class GlobalRestExceptionHandler {
                 HttpStatus.UNPROCESSABLE_ENTITY.value()
         );
     }
-
     @ExceptionHandler
     @ResponseStatus(code = HttpStatus.CONFLICT)
     private ExceptionResult<Object> handleDataIntegrityViolationExceptionException(DataIntegrityViolationException exception) {

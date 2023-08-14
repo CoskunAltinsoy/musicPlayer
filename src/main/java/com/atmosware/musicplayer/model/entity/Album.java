@@ -28,6 +28,4 @@ public class Album extends BaseEntity {
     @JoinColumn(name = "artist_id")
     private Artist artist;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Image image;
 }

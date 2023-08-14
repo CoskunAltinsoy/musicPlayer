@@ -25,7 +25,6 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Result create(RoleRequest request) {
         Role role = converter.convertToEntity(request);
-        role.setId(0L);
         role.setCreatedDate(LocalDateTime.now());
         repository.save(role);
         return new Result(Message.Role.SUCCESSFUL);
@@ -42,7 +41,7 @@ public class RoleServiceImpl implements RoleService {
         var responses = roles.stream()
                 .map(role -> converter.convertToResponse(role))
                 .toList();
-        return new DataResult<List<RoleResponse>>(Message.Role.SUCCESSFUL,responses);
+        return new DataResult<>(Message.Role.SUCCESSFUL,responses);
     }
     @Override
     public Role findById(Long id) {

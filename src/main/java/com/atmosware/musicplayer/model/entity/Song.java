@@ -39,7 +39,4 @@ public class Song extends BaseEntity {
 
     @ManyToMany(mappedBy = "songs")
     private Set<Favorite> favorites;
-
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Image image;
 }

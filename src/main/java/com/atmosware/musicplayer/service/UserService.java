@@ -21,8 +21,6 @@ public interface UserService {
     DataResult<TokenResetResponse> forgotPassword(ResetPasswordRequest request);
     Result followUser(Long followerId, Long followedId);
     Result unfollowUser(Long followerId, Long followedId);
-    Result followArtist(Long followerId, Long followedArtistId);
-    Result unfollowArtist(Long followerId, Long followedArtistId);
     User findById(Long id);
     User findByEmail(String email);
     User save(User user);

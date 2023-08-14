@@ -7,6 +7,7 @@ import lombok.*;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Getter
@@ -14,12 +15,12 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AlbumRequest {
+public class AlbumRequest implements Serializable {
     @Min(0)
     private Long artistId;
     @NotBlank
     @Length(min = 1, message = "length must be greater than 1")
     private String name;
     private LocalDateTime releasedYear;
-    private MultipartFile file;
+
 }

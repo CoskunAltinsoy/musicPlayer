@@ -74,14 +74,4 @@ public class UserController {
     public Result unfollowUser(@PathVariable Long followerId, @PathVariable Long followedId) {
         return service.unfollowUser(followerId, followedId);
     }
-    @PreAuthorize("hasAuthority('USER')")
-    @PostMapping("/follow-artist/{followerId}/{followedArtistId}")
-    public Result followArtist(@PathVariable Long followerId, @PathVariable Long followedArtistId) {
-        return service.followArtist(followerId, followedArtistId);
-    }
-    @PreAuthorize("hasAuthority('USER')")
-    @PostMapping("/unfollow-artist/{followerId}/{followedArtistId}")
-    public Result unfollowArtist(@PathVariable Long followerId, @PathVariable Long followedArtistId) {
-        return service.unfollowArtist(followerId, followedArtistId);
-    }
 }

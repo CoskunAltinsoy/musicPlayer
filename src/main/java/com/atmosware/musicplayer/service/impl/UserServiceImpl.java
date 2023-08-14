@@ -96,7 +96,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Result changePassword(PasswordRequest request) {
-        checkIfPasswordMatches(request.getEmail(), request.getOldPassword(), request.getNewPassword());
+        checkIfPasswordMatches(request.getEmail(), request.getOldPassword());
         User user = repository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new BusinessException(Message.User.NOT_EXIST));
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
@@ -122,7 +122,7 @@ public class UserServiceImpl implements UserService {
         user.setResetPasswordToken(generator.generateToken());
         repository.save(user);
         TokenResetResponse tokenResetResponse = new TokenResetResponse();
-        tokenResetResponse.setUrlWithToken(RequestUtils.getClientIPAddress() + "/api/users/resetPassword?token=" +
+        tokenResetResponse.setUrlWithToken("http://localhost:8080/api/users/resetPassword?token=" +
                 user.getResetPasswordToken());
         emailService.sendEmail(user.getEmail(), tokenResetResponse.getUrlWithToken());
         return new DataResult<>(Message.User.SUCCESSFUL, tokenResetResponse);
@@ -151,26 +151,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Result followArtist(Long followerId, Long followedArtistId) {
-        User user = repository.findById(followerId)
-                .orElseThrow(() -> new BusinessException(Message.User.NOT_EXIST));
-        Artist artist = artistService.findById(followedArtistId);
-        user.getFollowedArtists().add(artist);
-        repository.save(user);
-        return new Result(Message.User.SUCCESSFUL);
-    }
-
-    @Override
-    public Result unfollowArtist(Long followerId, Long followedArtistId) {
-        User user = repository.findById(followerId)
-                .orElseThrow(() -> new BusinessException(Message.User.NOT_EXIST));
-        Artist artist = artistService.findById(followedArtistId);
-        user.getFollowedArtists().remove(artist);
-        repository.save(user);
-        return new Result(Message.User.SUCCESSFUL);
-    }
-
-    @Override
     public User findById(Long id) {
         return repository.findById(id).orElseThrow(() -> new BusinessException(Message.User.NOT_EXIST));
     }
@@ -193,7 +173,7 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toSet());
     }
 
-    private void checkIfPasswordMatches(String email, String oldPassword, String newPassword) {
+    private void checkIfPasswordMatches(String email, String oldPassword) {
         var user = repository.findByEmail(email).orElseThrow(() -> new BusinessException(Message.User.NOT_EXIST));
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         if (!bCryptPasswordEncoder.matches(oldPassword, user.getPassword())) {

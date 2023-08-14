@@ -8,6 +8,8 @@ import com.atmosware.musicplayer.dto.response.RefreshTokenResponse;
 import com.atmosware.musicplayer.service.AuthService;
 import com.atmosware.musicplayer.util.result.DataResult;
 import com.atmosware.musicplayer.util.result.Result;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,7 +34,7 @@ public class AuthController {
         return service.refreshToken(request);
     }
     @PostMapping("/logout/{logout}")
-    public Result logout() {
-        return service.logout();
+    public Result logout(HttpServletRequest request, HttpServletResponse response) {
+        return service.logout(request, response);
     }
 }

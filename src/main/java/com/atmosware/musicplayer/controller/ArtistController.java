@@ -8,6 +8,7 @@ import com.atmosware.musicplayer.util.result.Result;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -17,32 +18,42 @@ import java.util.List;
 public class ArtistController {
     private final ArtistService service;
 
-    @PreAuthorize("hasAuthority('ADMIN') or hasRole('ARTIST')")
     @PostMapping
+    @PreAuthorize("hasAuthority('ADMIN') or hasRole('ARTIST')")
     public Result create(@RequestBody ArtistRequest request) {
         return service.create(request);
     }
-
-    @PreAuthorize("hasAuthority('ADMIN') or hasRole('ARTIST')")
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN') or hasRole('ARTIST')")
     public Result update(@RequestBody ArtistRequest request, @PathVariable Long id) {
          return service.update(request, id);
     }
-
-    @PreAuthorize("hasAuthority('ADMIN') or hasRole('ARTIST')")
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN') or hasRole('ARTIST')")
     public Result delete(@PathVariable Long id) {
         return service.delete(id);
     }
 
     @GetMapping("/{id}")
+
     public DataResult<ArtistResponse> getById(@PathVariable Long id) {
         return service.getById(id);
     }
 
     @GetMapping()
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('ARTIST') or hasAuthority('USER')")
     public DataResult<List<ArtistResponse>> getAll() {
         return service.getAll();
+    }
+    @PreAuthorize("hasAuthority('USER')")
+    @PostMapping("/follow-artist/{followerId}/{followedArtistId}")
+    public Result followArtist(@PathVariable Long followerId, @PathVariable Long followedArtistId) {
+        return service.followArtist(followerId, followedArtistId);
+    }
+    @PreAuthorize("hasAuthority('USER')")
+    @PostMapping("/unfollow-artist/{followerId}/{followedArtistId}")
+    public Result unfollowArtist(@PathVariable Long followerId, @PathVariable Long followedArtistId) {
+        return service.unfollowArtist(followerId, followedArtistId);
     }
 }
 

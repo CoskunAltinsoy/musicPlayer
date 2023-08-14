@@ -19,5 +19,4 @@ public class SongRequest {
     private Set<Long> genreIds;
     @NotBlank
     private String name;
-    private MultipartFile file;
 }

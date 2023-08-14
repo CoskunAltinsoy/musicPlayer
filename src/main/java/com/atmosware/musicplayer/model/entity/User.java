@@ -34,9 +34,6 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Playlist> playlists;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<Favorite> favorites;
-
     @ManyToMany
     @JoinTable(
             name = "user_follows_artist",

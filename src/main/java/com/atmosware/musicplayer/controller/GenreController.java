@@ -16,27 +16,31 @@ import java.util.List;
 @RequestMapping("/api/genre")
 public class GenreController {
     private final GenreService service;
-    @PreAuthorize("hasRole('ADMIN')")
+
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public Result create(@RequestBody GenreRequest request){
         return service.create(request);
     }
-    @PreAuthorize("hasAuthority('ADMIN')")
+
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Result update(@RequestBody GenreRequest request, @PathVariable Long id){
         return service.update(request,id);
     }
-    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Result delete(@PathVariable Long id) {
         return service.delete(id);
     }
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public DataResult<GenreResponse> getById(@PathVariable Long id) {
         return service.getById(id);
     }
 
     @GetMapping()
+    @PreAuthorize("hasAuthority('ADMIN')")
     public DataResult<List<GenreResponse>> getAll() {
         return service.getAll();
     }
